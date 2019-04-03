@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
 #
 # rhsm-api_get-systems.py
 #
@@ -166,12 +166,11 @@ class Portal:
         json_output = self._get('systems', params=payload)
         return json_output
 
+
 def output_file_check(csv_filename):
     if os.path.isfile(csv_filename):
-        text = input('CSV output file already exits. Do you want to ignore it? (y/N)')
-        if text == "":
-            pass
-        elif text.lower() == "n":
+        text = input('CSV output file already exits. Do you want to override it? (y/N)')
+        if text == ""  or text.lower() == "n":
             sys.exit(time.ctime() + ' - Please change output filename path if you don\'t want to override existing '
                                     'file %s.' % csv_filename)
         elif text.lower() == "y":
@@ -180,14 +179,33 @@ def output_file_check(csv_filename):
                 csv_writer.writerow(['Name','UUID','Subscriptions Attached','Type','Cloud Provider','Status',
                                     'Last Check in','Security Advisories','Bug Fixes','Enhancements'])
 
-def main():
-    parser = argparse.ArgumentParser(description="RHSM API implementation")
-    parser.add_argument("-u", "--username", help="Red Hat customer portal username", required=True)
-    parser.add_argument("-p", "--password", help="Red Hat customer portal password", required=True)
-    parser.add_argument("-c", "--client_id", help="Red Hat customer portal API Key Client ID", required=True)
-    parser.add_argument("-s", "--client_secret", help="Red Hat customer portal API Key Client Secret", required=True)
-    parser.add_argument("-o", "--output_csv", help="Output CSV file", required=True)
-    args = parser.parse_args()
+def add_systems_command_options(subparsers):
+    systems_parser = subparsers.add_parser('systems',
+                                         help='Generate systems CSV report.')
+
+    systems_parser.add_argument("-o", "--output_csv", help="Output CSV file", required=True)
+
+    systems_parser.add_argument('-l', '--limit', help='The default and max number of result in a response are 100.',
+                                default=100, required=False, action='store')
+
+def add_allocations_command_options(subparsers):
+    allocations_parser = subparsers.add_parser('allocations',
+                                         help='Generate allocations CSV report.')
+
+def add_subscriptions_command_options(subparsers):
+    subscriptions_parser = subparsers.add_parser('subscriptions',
+                                         help='Generate subscriptions CSV report.')
+
+def add_erratas_command_options(subparsers):
+    erratas_parser = subparsers.add_parser('erratas',
+                                         help='Generate erratas CSV report.')
+
+def add_packages_command_options(subparsers):
+    systems_parser = subparsers.add_parser('packages',
+                                         help='Generate packages CSV report.')
+
+
+def run_systems(args):
 
     output_file_check(args.output_csv)
 
@@ -198,15 +216,13 @@ def main():
     auth.fetch_token()
     portal = Portal(auth)
 
-    limit = 100
+    limit = int(args.limit)
     offset = 0
-
     while True:
         this_systems_json = portal.systems(limit, offset)
         this_systems = Systems(this_systems_json['pagination'], this_systems_json['body'])
         if this_systems.get_count() != 0:
             total_count = total_count + this_systems.get_count()
-            current_offset = offset
             offset = offset + limit
             for system in this_systems.get_body():
                 if 'errataCounts' not in system:
@@ -225,6 +241,53 @@ def main():
 
     print(time.ctime() + " - Total Number of systems in list: %d" % len(all_systems))
     print(time.ctime() + " - Total Number of systems from count: %d" % total_count)
+
+
+def run_allocations(args):
+    print('To be implemented')
+
+def run_subscriptions(args):
+    print('To be implemented')
+
+def run_erratas(args):
+    print('To be implemented')
+
+def run_packages(args):
+    print('To be implemented')
+
+
+def main():
+    parser = argparse.ArgumentParser(description="RHSM API implementation")
+    group = parser.add_argument_group('authentication')
+    group.add_argument("-u", "--username", help="Red Hat customer portal username", required=True, action="store")
+    group.add_argument("-p", "--password", help="Red Hat customer portal password", required=True, action="store")
+    group.add_argument("-c", "--client_id", help="Red Hat customer portal API Key Client ID", required=True,
+                       action="store")
+    group.add_argument("-s", "--client_secret", help="Red Hat customer portal API Key Client Secret",
+                       required=True, action="store")
+
+    subparsers = parser.add_subparsers(help='Program mode: systems, allocations, subscriptions, errata, packages)', dest='mode')
+
+    add_systems_command_options(subparsers)
+    add_allocations_command_options(subparsers)
+    add_subscriptions_command_options(subparsers)
+    add_erratas_command_options(subparsers)
+    add_packages_command_options(subparsers)
+
+    args = parser.parse_args()
+
+    if args.mode == "systems":
+        run_systems(args)
+    elif args.mode == "allocations":
+        run_allocations(args)
+    elif args.mode == "subscriptions":
+        run_subscriptions(args)
+    elif args.mode == "erratas":
+        run_erratas(args)
+    elif args.mode == "packages":
+        run_packages(args)
+    else:
+        parser.print_usage()
 
 
 if __name__ == "__main__":
