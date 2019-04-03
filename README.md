@@ -60,6 +60,10 @@ $ sudo yum install python2-requests-oauthlib
 
 This script can be executed from your preferred path
 
+## Example Usage
+
+$ ./get_subscriptions.py -u "MyRHNUsername" -p "MyRHNPassword" -c "MyClientID" -s "MyClientSecret" -o "systems.csv"
+
 ## Authors
 
 * **Antonio Romito** - *Initial work* - [rhsm-api-client](https://github.com/antonioromito/rhsm-api-client)
