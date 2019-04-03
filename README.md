@@ -21,8 +21,16 @@ In order to transition to using APIs for Red Hat Subscription Management, Red Ha
 
 Red Hat Subscription Management APIs use OAuth 2.0 for authorization. For this reason rhsm-api-client uses the following libs:
 
-* oauthlib.oauth2
-* requests_oauthlib
+* Python3 package required:
+
+    * python3-requests-oauthlib-1.0.0-1.fc29.noarch
+    * python3-oauthlib-2.1.0-1.fc29.noarch
+
+* Python2 package required:
+
+    * python2-requests-oauthlib-1.0.0-1.fc29.noarch
+    * python2-oauthlib-2.1.0-1.fc29.noarch
+
 
 Before to start script execution, you'll need the following information:
 
@@ -32,38 +40,73 @@ Before to start script execution, you'll need the following information:
 
 ### Installing
 
-Installing instruction for Fedora 29:
+* Installing instruction for Fedora 29:
 
-* Python3 package required:
+    * RPM Packages installation for Python3:
+    ```
+    $ sudo yum install python3-oauth2client
+    $ sudo yum install python3-requests-oauthlib
+    ```
 
-    * python3-requests-oauthlib-1.0.0-1.fc29.noarch
-    * python3-oauthlib-2.1.0-1.fc29.noarch
+    * RPM Packages installation for Python2:
+    ```
+    $ sudo yum install python2-oauth2client
+    $ sudo yum install python2-requests-oauthlib
+    ```
+* Installing instruction using pip:
 
-* Installation instructions:
-```
-$ sudo yum install python3-oauth2client
-$ sudo yum install python3-requests-oauthlib
-```
-
-* Python2
-
-    * python2-requests-oauthlib-1.0.0-1.fc29.noarch
-    * python2-oauthlib-2.1.0-1.fc29.noarch
-
-Installation instructions:
-```
-$ sudo yum install python2-oauth2client
-$ sudo yum install python2-requests-oauthlib
-```
-
+    * pip installer commands for Python3:
+    ```
+    $ sudo pip install oauth2client
+    $ sudo pip install requests-oauthlib
+    ```
+    * pip installer commands for Python2:
+    ```
+    $ sudo pip install oauth2client
+    $ sudo pip install requests-oauthlib   
+    ```
 ## Deployment
 
 This script can be executed from your preferred path
 
+## Usage
+
+```
+usage: rhsm-api-client.py [-h] -u USERNAME -p PASSWORD -c CLIENT_ID -s
+                              CLIENT_SECRET
+                              {systems,allocations,subscriptions,erratas,packages}
+                              ...
+
+RHSM API implementation
+
+positional arguments:
+  {systems,allocations,subscriptions,erratas,packages}
+                        Program mode: systems, allocations, subscriptions,
+                        errata, packages)
+    systems             Generate systems CSV report.
+    allocations         Generate allocations CSV report.
+    subscriptions       Generate subscriptions CSV report.
+    erratas             Generate erratas CSV report.
+    packages            Generate packages CSV report.
+
+optional arguments:
+ -h, --help            show this help message and exit
+
+authentication:
+  -u USERNAME, --username USERNAME
+                        Red Hat customer portal username
+  -p PASSWORD, --password PASSWORD
+                        Red Hat customer portal password
+  -c CLIENT_ID, --client_id CLIENT_ID
+                        Red Hat customer portal API Key Client ID
+  -s CLIENT_SECRET, --client_secret CLIENT_SECRET
+                        Red Hat customer portal API Key Client Secret
+```
+
 ## Example Usage
 
 ```
-$ ./get_subscriptions.py -u "MyRHNUsername" -p "MyRHNPassword" -c "MyClientID" -s "MyClientSecret" -o "systems.csv"
+$ ./rhsm-api_client.py -u "MyRHNUsername" -p "MyRHNPassword" -c "MyClientID" -s "MyClientSecret" systems -o /path/to/systems.csv -l 100
 ```
 
 ## Authors
