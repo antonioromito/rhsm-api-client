@@ -20,13 +20,27 @@
 # Please refer to the following bugzilla for more info:
 # <https://bugzilla.redhat.com/show_bug.cgi?id=1597355>
 #
-# usage: rhsm-api_get-systems.py [-h] -u USERNAME -p PASSWORD -c CLIENT_ID -s
-#                                CLIENT_SECRET -o OUTPUT_CSV
+# usage: rhsm-api_get-system.py [-h] -u USERNAME -p PASSWORD -c CLIENT_ID -s
+#                               CLIENT_SECRET
+#                               {systems,allocations,subscriptions,erratas,packages}
+#                               ...
 #
 # RHSM API implementation
 #
+# positional arguments:
+#   {systems,allocations,subscriptions,erratas,packages}
+#                         Program mode: systems, allocations, subscriptions,
+#                         errata, packages)
+#     systems             Generate systems CSV report.
+#     allocations         Generate allocations CSV report.
+#     subscriptions       Generate subscriptions CSV report.
+#     erratas             Generate erratas CSV report.
+#     packages            Generate packages CSV report.
+#
 # optional arguments:
 #   -h, --help            show this help message and exit
+#
+# authentication:
 #   -u USERNAME, --username USERNAME
 #                         Red Hat customer portal username
 #   -p PASSWORD, --password PASSWORD
@@ -35,8 +49,6 @@
 #                         Red Hat customer portal API Key Client ID
 #   -s CLIENT_SECRET, --client_secret CLIENT_SECRET
 #                         Red Hat customer portal API Key Client Secret
-#   -o OUTPUT_CSV, --output_csv OUTPUT_CSV
-#                         Output CSV file
 #
 import requests
 import csv
@@ -88,7 +100,6 @@ class System:
             self.securityCount = 0
             self.bugfixCount = 0
             self.enhancementCount = 0
-
 
     def set_errata_counts(self):
         self.securityCount = self.errataCounts['securityCount']
@@ -165,17 +176,18 @@ class Portal:
             try:
                 response.raise_for_status()
                 success = True
-            except requests.exceptions.HTTPError as err:
+            except requests.exceptions.HTTPError:
                 wait = 5
                 retries += 1
                 time.sleep(wait)
-                print(time.ctime() + ' - Response status code code indicate a failed attempt to retrive data. Waiting %s secs and re-trying... Attempt number [%d]' % (str(wait), retries))
+                print(time.ctime() + ' - Response status code code indicate a failed attempt to retrive data. '
+                                     'Waiting %s secs and re-trying... Attempt number [%d]' % (str(wait), retries))
 
             if response.status_code == requests.codes.ok:
                 return response.json()
             elif response.status_code != requests.codes.ok and retries == 3:
-                sys.exit(time.ctime() + ' - Exiting after %d failed attempts to retrive data from: %s' % (retries, response.url))
-
+                sys.exit(time.ctime() + ' - Exiting after %d failed attempts to retrive data from: %s' % (retries,
+                                                                                                          response.url))
 
     def systems(self, limit, offset):
         payload = {'limit': limit, 'offset': offset}
@@ -189,14 +201,15 @@ def output_file_check(csv_filename):
             text = input('CSV output file already exits. Do you want to override it? (y/N)')
         else:
             text = raw_input('CSV output file already exits. Do you want to override it? (y/N)')
-        if text == ""  or text.lower() == "n":
+        if text == "" or text.lower() == "n":
             sys.exit(time.ctime() + ' - Please change output filename path if you don\'t want to override existing '
                                     'file %s.' % csv_filename)
         elif text.lower() == "y":
             with open(csv_filename, 'w') as csvfile:
                 csv_writer = csv.writer(csvfile, delimiter=',')
-                csv_writer.writerow(['Name','UUID','Subscriptions Attached','Type','Cloud Provider','Status',
-                                    'Last Check in','Security Advisories','Bug Fixes','Enhancements'])
+                csv_writer.writerow(['Name','UUID', 'Subscriptions Attached', 'Type', 'Cloud Provider', 'Status',
+                                    'Last Check in', 'Security Advisories', 'Bug Fixes', 'Enhancements'])
+
 
 def add_systems_command_options(subparsers):
     systems_parser = subparsers.add_parser('systems',
@@ -207,13 +220,16 @@ def add_systems_command_options(subparsers):
     systems_parser.add_argument('-l', '--limit', help='The default and max number of result in a response are 100.',
                                 default=100, required=False, action='store')
 
+
 def add_allocations_command_options(subparsers):
     allocations_parser = subparsers.add_parser('allocations',
                                          help='Generate allocations CSV report.')
 
+
 def add_subscriptions_command_options(subparsers):
     subscriptions_parser = subparsers.add_parser('subscriptions',
                                          help='Generate subscriptions CSV report.')
+
 
 def add_erratas_command_options(subparsers):
     erratas_parser = subparsers.add_parser('erratas',
@@ -268,11 +284,14 @@ def run_systems(args):
 def run_allocations(args):
     print('To be implemented')
 
+
 def run_subscriptions(args):
     print('To be implemented')
 
+
 def run_erratas(args):
     print('To be implemented')
+
 
 def run_packages(args):
     print('To be implemented')
@@ -294,7 +313,8 @@ def main():
     group.add_argument("-s", "--client_secret", help="Red Hat customer portal API Key Client Secret",
                        required=True, action="store")
 
-    subparsers = parser.add_subparsers(help='Program mode: systems, allocations, subscriptions, errata, packages)', dest='mode')
+    subparsers = parser.add_subparsers(help='Program mode: systems, allocations, subscriptions, errata, packages)',
+                                       dest='mode')
 
     add_systems_command_options(subparsers)
     add_allocations_command_options(subparsers)
