@@ -106,7 +106,7 @@ authentication:
 ## Example Usage
 
 ```
-$ ./rhsm-api_client.py -u "MyRHNUsername" -p "MyRHNPassword" -c "MyClientID" -s "MyClientSecret" systems -o /path/to/systems.csv -l 100
+$ ./rhsm-api-client.py -u "MyRHNUsername" -p "MyRHNPassword" -c "MyClientID" -s "MyClientSecret" systems -o /path/to/systems.csv -l 100
 ```
 
 ## Authors
