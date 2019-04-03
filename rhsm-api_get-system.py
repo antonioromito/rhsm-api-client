@@ -18,7 +18,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # Please refer to the following bugzilla for more info:
-# <https://bugzilla.redhat.com/show_bug.cgi?id=1673170>
+# <https://bugzilla.redhat.com/show_bug.cgi?id=1597355>
 #
 # usage: rhsm-api_get-systems.py [-h] -u USERNAME -p PASSWORD -c CLIENT_ID -s
 #                                CLIENT_SECRET -o OUTPUT_CSV
