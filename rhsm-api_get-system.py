@@ -96,7 +96,7 @@ class System:
         self.enhancementCount = self.errataCounts['enhancementCount']
 
     def print_system_to_csv(self, csv_filename):
-        with open(csv_filename, 'a', newline='') as csvfile:
+        with open(csv_filename, 'a') as csvfile:
             csv_writer = csv.writer(csvfile, delimiter=',')
             csv_writer.writerow([self.name, self.uuid, self.enhancementCount, self.type, "Not Available",
                                  self.entitlementStatus, self.lastCheckin, self.securityCount, self.bugfixCount,
@@ -133,48 +133,67 @@ class AuthorizationCode:
 
 
 class Portal:
-    API_URL = 'https://api.access.redhat.com/management/v1/'
+    API_URL = 'https://api.access.redhat.com/management/v1'
 
     def __init__(self, auth=None):
         self.auth = auth
 
-    def _get(self, *endpoint, params=None):
-        endpoint = '/'.join(endpoint)
-        print(time.ctime() + ' - Starting request: %s with params: %s ' % (self.API_URL + endpoint, params))
-        if self.auth:
-            try:
+    def _get(self, endpoint, params=None):
+        retries = 0
+        success = False
+        while not success and retries < 3:
+            url = self.API_URL + '/' + endpoint
+            print(time.ctime() + ' - Starting request: %s with params: %s ' % (url, params))
+            if self.auth:
+                try:
+                    t1 = time.time()
+                    response = self.auth.session.get(url, params=params)
+                    t2 = time.time()
+                except TokenExpiredError:
+                    print(time.ctime() + ' - Token has expired. Refreshing token...')
+                    self.auth.refresh_token()
+                    t1 = time.time()
+                    response = self.auth.session.get(url, params=params)
+                    t2 = time.time()
+            else:
                 t1 = time.time()
-                response = self.auth.session.get(self.API_URL + endpoint, params=params)
+                response = requests.get(url, params=params)
                 t2 = time.time()
-            except TokenExpiredError:
-                print(time.ctime() + ' - Token has expired. Refreshing token...')
-                self.auth.refresh_token()
-                t1 = time.time()
-                response = self.auth.session.get(self.API_URL + endpoint, params=params)
-                t2 = time.time()
-        else:
-            t1 = time.time()
-            response = requests.get(self.API_URL + endpoint, params=params)
-            t2 = time.time()
-        print(time.ctime() + ' - The Round Trip Time (RTT) for %s is %.4fs. Status code is: %s' % (response.url, (t2 - t1), response.status_code))
+            print(time.ctime() + ' - The Round Trip Time (RTT) for %s is %.4fs. Status code is: %s' %
+                  (response.url, (t2 - t1), response.status_code))
 
-        return response.json()
+            try:
+                response.raise_for_status()
+                success = True
+            except requests.exceptions.HTTPError as err:
+                wait = 5
+                retries += 1
+                time.sleep(wait)
+                print(time.ctime() + ' - Response status code code indicate a failed attempt to retrive data. Waiting %s secs and re-trying... Attempt number [%d]' % (str(wait), retries))
+
+            if response.status_code == requests.codes.ok:
+                return response.json()
+            elif response.status_code != requests.codes.ok and retries == 3:
+                sys.exit(time.ctime() + ' - Exiting after %d failed attempts to retrive data from: %s' % (retries, response.url))
+
 
     def systems(self, limit, offset):
         payload = {'limit': limit, 'offset': offset}
-        payload = {'limit': limit, 'offset': offset}
-        json_output = self._get('systems', params=payload)
+        json_output = self._get("systems", params=payload)
         return json_output
 
 
 def output_file_check(csv_filename):
     if os.path.isfile(csv_filename):
-        text = input('CSV output file already exits. Do you want to override it? (y/N)')
+        if is_python_3():
+            text = input('CSV output file already exits. Do you want to override it? (y/N)')
+        else:
+            text = raw_input('CSV output file already exits. Do you want to override it? (y/N)')
         if text == ""  or text.lower() == "n":
             sys.exit(time.ctime() + ' - Please change output filename path if you don\'t want to override existing '
                                     'file %s.' % csv_filename)
         elif text.lower() == "y":
-            with open(csv_filename, 'w', newline='') as csvfile:
+            with open(csv_filename, 'w') as csvfile:
                 csv_writer = csv.writer(csvfile, delimiter=',')
                 csv_writer.writerow(['Name','UUID','Subscriptions Attached','Type','Cloud Provider','Status',
                                     'Last Check in','Security Advisories','Bug Fixes','Enhancements'])
@@ -217,6 +236,9 @@ def run_systems(args):
     portal = Portal(auth)
 
     limit = int(args.limit)
+    if limit > 100:
+        limit = 100
+        
     offset = 0
     while True:
         this_systems_json = portal.systems(limit, offset)
@@ -255,6 +277,12 @@ def run_erratas(args):
 def run_packages(args):
     print('To be implemented')
 
+
+def is_python_3():
+    if sys.version_info > (3, 0):
+        return True
+    else:
+        return False
 
 def main():
     parser = argparse.ArgumentParser(description="RHSM API implementation")
