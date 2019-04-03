@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 #
-# rhsm-api_get-systems.py
+# rhsm-api_client.py
 #
 # Copyright (C) 2019 Antonio Romito
 #
@@ -20,7 +20,7 @@
 # Please refer to the following bugzilla for more info:
 # <https://bugzilla.redhat.com/show_bug.cgi?id=1597355>
 #
-# usage: rhsm-api_get-system.py [-h] -u USERNAME -p PASSWORD -c CLIENT_ID -s
+# usage: rhsm-api-client.py [-h] -u USERNAME -p PASSWORD -c CLIENT_ID -s
 #                               CLIENT_SECRET
 #                               {systems,allocations,subscriptions,erratas,packages}
 #                               ...
