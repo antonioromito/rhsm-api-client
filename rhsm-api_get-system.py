@@ -42,6 +42,8 @@ import requests
 import csv
 import argparse
 import time
+import sys
+import os
 from oauthlib.oauth2 import LegacyApplicationClient
 from oauthlib.oauth2 import TokenExpiredError
 from requests_oauthlib import OAuth2Session
@@ -154,15 +156,29 @@ class Portal:
             t1 = time.time()
             response = requests.get(self.API_URL + endpoint, params=params)
             t2 = time.time()
-        print(time.ctime() + ' - The Round Trip Time for %s is %s' % (response.url, str(t2 - t1)))
+        print(time.ctime() + ' - The Round Trip Time (RTT) for %s is %.4fs. Status code is: %s' % (response.url, (t2 - t1), response.status_code))
 
         return response.json()
 
     def systems(self, limit, offset):
         payload = {'limit': limit, 'offset': offset}
-        json = self._get('systems', params=payload)
-        return json
+        payload = {'limit': limit, 'offset': offset}
+        json_output = self._get('systems', params=payload)
+        return json_output
 
+def output_file_check(csv_filename):
+    if os.path.isfile(csv_filename):
+        text = input('CSV output file already exits. Do you want to ignore it? (y/N)')
+        if text == "":
+            pass
+        elif text.lower() == "n":
+            sys.exit(time.ctime() + ' - Please change output filename path if you don\'t want to override existing '
+                                    'file %s.' % csv_filename)
+        elif text.lower() == "y":
+            with open(csv_filename, 'w', newline='') as csvfile:
+                csv_writer = csv.writer(csvfile, delimiter=',')
+                csv_writer.writerow(['Name','UUID','Subscriptions Attached','Type','Cloud Provider','Status',
+                                    'Last Check in','Security Advisories','Bug Fixes','Enhancements'])
 
 def main():
     parser = argparse.ArgumentParser(description="RHSM API implementation")
@@ -171,8 +187,9 @@ def main():
     parser.add_argument("-c", "--client_id", help="Red Hat customer portal API Key Client ID", required=True)
     parser.add_argument("-s", "--client_secret", help="Red Hat customer portal API Key Client Secret", required=True)
     parser.add_argument("-o", "--output_csv", help="Output CSV file", required=True)
-
     args = parser.parse_args()
+
+    output_file_check(args.output_csv)
 
     total_count = 0
     all_systems = list()
