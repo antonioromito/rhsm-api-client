@@ -55,9 +55,7 @@ import argparse
 import time
 import sys
 import os
-import systems
-import rhsmapi
-import rhauth
+from redhat import rhauth, rhsmapi, systems
 
 
 def output_file_check(csv_filename):
@@ -134,8 +132,8 @@ def run_systems(args):
                     system['lastCheckin'] = None
 
                 this_system = systems.System(system['entitlementCount'], system['entitlementStatus'], system['errataCounts'],
-                                     system['href'], system['lastCheckin'], system['name'], system['type'],
-                                     system['uuid'])
+                                             system['href'], system['lastCheckin'], system['name'], system['type'],
+                                             system['uuid'])
 
                 this_system.print_system_to_csv(args.output_csv)
                 all_systems.append(this_system)
