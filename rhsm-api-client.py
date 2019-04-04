@@ -50,149 +50,14 @@
 #   -s CLIENT_SECRET, --client_secret CLIENT_SECRET
 #                         Red Hat customer portal API Key Client Secret
 #
-import requests
 import csv
 import argparse
 import time
 import sys
 import os
-from oauthlib.oauth2 import LegacyApplicationClient
-from oauthlib.oauth2 import TokenExpiredError
-from requests_oauthlib import OAuth2Session
-
-
-class Systems:
-    def __init__(self, pagination, body):
-        self.pagination = pagination
-        self.body = body
-
-    def get_body(self):
-        return self.body
-
-    def get_count(self):
-        return self.pagination['count']
-
-    def get_limit(self):
-        return self.pagination['limit']
-
-    def get_offset(self):
-        return self.pagination['offset']
-
-
-class System:
-    def __init__(self, entitlement_count, entitlement_status, errata_counts, href, last_checkin, name, stype, uuid):
-        self.entitlementCount = entitlement_count
-        self.entitlementStatus = entitlement_status
-        self.errataCounts = errata_counts
-        self.href = href
-        self.lastCheckin = last_checkin
-        self.name = name
-        self.type = stype
-        self.uuid = uuid
-
-        self.securityCount = None
-        self.bugfixCount = None
-        self.enhancementCount = None
-
-        if self.errataCounts is not None:
-            self.set_errata_counts()
-        else:
-            self.securityCount = 0
-            self.bugfixCount = 0
-            self.enhancementCount = 0
-
-    def set_errata_counts(self):
-        self.securityCount = self.errataCounts['securityCount']
-        self.bugfixCount = self.errataCounts['bugfixCount']
-        self.enhancementCount = self.errataCounts['enhancementCount']
-
-    def print_system_to_csv(self, csv_filename):
-        with open(csv_filename, 'a') as csvfile:
-            csv_writer = csv.writer(csvfile, delimiter=',')
-            csv_writer.writerow([self.name, self.uuid, self.enhancementCount, self.type, "Not Available",
-                                 self.entitlementStatus, self.lastCheckin, self.securityCount, self.bugfixCount,
-                                 self.enhancementCount])
-
-    def __repr__(self):
-        return ('Name: %s UUID: %s Subscriptions Attached: %d Type: %s Cloud Provider: %s Status: %s '
-                'Last Check in: %s Security Advisories: %d Bug Fixes: %d Enhancements: %d' %
-                (self.name, self.uuid, self.enhancementCount, self.type, "Not Available", self.entitlementStatus,
-                 self.lastCheckin, self.securityCount, self.bugfixCount, self.enhancementCount))
-
-
-class AuthorizationCode:
-    TOKEN_URL = 'https://sso.redhat.com/auth/realms/3scale/protocol/openid-connect/token'
-
-    def __init__(self, username, password, client_id, client_secret, token=None):
-        self.username = username
-        self.password = password
-        self.client_id = client_id
-        self.client_secret = client_secret
-        self.token = token
-
-        self.session = OAuth2Session(client=LegacyApplicationClient(client_id=self.client_id))
-
-    def fetch_token(self):
-        self.token = self.session.fetch_token(token_url=self.TOKEN_URL, username=self.username, password=self.password,
-                                              client_id=self.client_id, client_secret=self.client_secret)
-        return self.token
-
-    def refresh_token(self):
-        self.token = self.session.refresh_token(token_url=self.TOKEN_URL, client_id=self.client_id,
-                                                client_secret=self.client_secret)
-        return self.token
-
-
-class Portal:
-    API_URL = 'https://api.access.redhat.com/management/v1'
-
-    def __init__(self, auth=None):
-        self.auth = auth
-
-    def _get(self, endpoint, params=None):
-        retries = 0
-        success = False
-        while not success and retries < 3:
-            url = self.API_URL + '/' + endpoint
-            print(time.ctime() + ' - Starting request: %s with params: %s ' % (url, params))
-            if self.auth:
-                try:
-                    t1 = time.time()
-                    response = self.auth.session.get(url, params=params)
-                    t2 = time.time()
-                except TokenExpiredError:
-                    print(time.ctime() + ' - Token has expired. Refreshing token...')
-                    self.auth.refresh_token()
-                    t1 = time.time()
-                    response = self.auth.session.get(url, params=params)
-                    t2 = time.time()
-            else:
-                t1 = time.time()
-                response = requests.get(url, params=params)
-                t2 = time.time()
-            print(time.ctime() + ' - The Round Trip Time (RTT) for %s is %.4fs. Status code is: %s' %
-                  (response.url, (t2 - t1), response.status_code))
-
-            try:
-                response.raise_for_status()
-                success = True
-            except requests.exceptions.HTTPError:
-                wait = 5
-                retries += 1
-                time.sleep(wait)
-                print(time.ctime() + ' - Response status code code indicate a failed attempt to retrive data. '
-                                     'Waiting %s secs and re-trying... Attempt number [%d]' % (str(wait), retries))
-
-            if response.status_code == requests.codes.ok:
-                return response.json()
-            elif response.status_code != requests.codes.ok and retries == 3:
-                sys.exit(time.ctime() + ' - Exiting after %d failed attempts to retrive data from: %s' % (retries,
-                                                                                                          response.url))
-
-    def systems(self, limit, offset):
-        payload = {'limit': limit, 'offset': offset}
-        json_output = self._get("systems", params=payload)
-        return json_output
+import systems
+import rhsmapi
+import rhauth
 
 
 def output_file_check(csv_filename):
@@ -247,18 +112,18 @@ def run_systems(args):
     total_count = 0
     all_systems = list()
 
-    auth = AuthorizationCode(args.username, args.password, args.client_id, args.client_secret)
-    auth.fetch_token()
-    portal = Portal(auth)
+    authorization = rhauth.AuthorizationCode(args.username, args.password, args.client_id, args.client_secret)
+    authorization.fetch_token()
+    api_service = rhsmapi.RHSMapi(authorization)
 
     limit = int(args.limit)
     if limit > 100:
         limit = 100
-        
+
     offset = 0
     while True:
-        this_systems_json = portal.systems(limit, offset)
-        this_systems = Systems(this_systems_json['pagination'], this_systems_json['body'])
+        this_systems_json = api_service.systems(limit, offset)
+        this_systems = systems.Systems(this_systems_json['pagination'], this_systems_json['body'])
         if this_systems.get_count() != 0:
             total_count = total_count + this_systems.get_count()
             offset = offset + limit
@@ -268,7 +133,7 @@ def run_systems(args):
                 if 'lastCheckin' not in system:
                     system['lastCheckin'] = None
 
-                this_system = System(system['entitlementCount'], system['entitlementStatus'], system['errataCounts'],
+                this_system = systems.System(system['entitlementCount'], system['entitlementStatus'], system['errataCounts'],
                                      system['href'], system['lastCheckin'], system['name'], system['type'],
                                      system['uuid'])
 
@@ -302,6 +167,7 @@ def is_python_3():
         return True
     else:
         return False
+
 
 def main():
     parser = argparse.ArgumentParser(description="RHSM API implementation")
