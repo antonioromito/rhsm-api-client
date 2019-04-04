@@ -23,14 +23,13 @@ Red Hat Subscription Management APIs use OAuth 2.0 for authorization. For this r
 
 * Python3 package required:
 
-    * python3-requests-oauthlib-1.0.0-1.fc29.noarch
-    * python3-oauthlib-2.1.0-1.fc29.noarch
-
+    * python3-requests-oauthlib
+    * python3-oauthlib
+    
 * Python2 package required:
 
-    * python2-requests-oauthlib-1.0.0-1.fc29.noarch
-    * python2-oauthlib-2.1.0-1.fc29.noarch
-
+    * python2-requests-oauthlib
+    * python2-oauthlib
 
 Before to start script execution, you'll need the following information:
 
@@ -57,8 +56,8 @@ Before to start script execution, you'll need the following information:
 
     * pip installer commands for Python3:
     ```
-    $ sudo pip install oauth2client
-    $ sudo pip install requests-oauthlib
+    $ sudo pip3 install oauth2client
+    $ sudo pip3 install requests-oauthlib
     ```
     * pip installer commands for Python2:
     ```
