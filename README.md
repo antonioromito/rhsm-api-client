@@ -64,6 +64,13 @@ Before to start script execution, you'll need the following information:
     $ sudo pip install oauth2client
     $ sudo pip install requests-oauthlib   
     ```
+* rhsm-api-client installing instructions:
+
+    * Clone git repository:
+    ```
+    $ git clone https://github.com/antonioromito/rhsm-api-client
+    ```  
+  
 ## Deployment
 
 This script can be executed from your preferred path
@@ -102,7 +109,9 @@ authentication:
                         Red Hat customer portal API Key Client Secret
 ```
 
-## Example Usage
+## Examples
+
+* Generate CSV listing all systems
 
 ```
 $ ./rhsm-api-client.py -u "MyRHNUsername" -p "MyRHNPassword" -c "MyClientID" -s "MyClientSecret" systems -o /path/to/systems.csv -l 100
