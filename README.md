@@ -39,37 +39,48 @@ Before to start script execution, you'll need the following information:
 
 ### Installing
 
-* Installing instruction for Fedora 29:
+#### Installing instructions for Fedora 29:
 
-    * RPM Packages installation for Python3:
-    ```
-    $ sudo yum install python3-oauth2client
-    $ sudo yum install python3-requests-oauthlib
-    ```
+* RPM Packages installation for Python3:
+```
+$ sudo yum install python3-oauth2client
+$ sudo yum install python3-requests-oauthlib
+```
 
-    * RPM Packages installation for Python2:
-    ```
-    $ sudo yum install python2-oauth2client
-    $ sudo yum install python2-requests-oauthlib
-    ```
-* Installing instruction using pip:
+* RPM Packages installation for Python2:
+```
+$ sudo yum install python2-oauth2client
+$ sudo yum install python2-requests-oauthlib
+```
+    
+#### Installing instructions for RHEL 7.6 via EPEL repos:
+       
+* Install EPEL repo rpm
+    
+If you are running an EL7 version, please visit here to get the newest 'epel-release' package for EL7: [The newest version of 'epel-release' for EL7](https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm)
 
-    * pip installer commands for Python3:
-    ```
-    $ sudo pip3 install oauth2client
-    $ sudo pip3 install requests-oauthlib
-    ```
-    * pip installer commands for Python2:
-    ```
-    $ sudo pip install oauth2client
-    $ sudo pip install requests-oauthlib   
-    ```
-* rhsm-api-client installing instructions:
+```
+$ sudo rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+```
+    
+* Install git
+    
+```
+$ sudo yum install git
+```
 
-    * Clone git repository:
-    ```
-    $ git clone https://github.com/antonioromito/rhsm-api-client
-    ```  
+* Install required packages:
+
+```
+sudo yum install python2-oauth2client python2-requests-oauthlib
+```
+
+### rhsm-api-client installing instructions:
+
+* Cloning git repository:
+```
+$ git clone https://github.com/antonioromito/rhsm-api-client
+```  
   
 ## Deployment
 
@@ -114,7 +125,7 @@ authentication:
 * Generate CSV listing all systems
 
 ```
-$ ./rhsm-api-client.py -u "MyRHNUsername" -p "MyRHNPassword" -c "MyClientID" -s "MyClientSecret" systems -o /path/to/systems.csv -l 100
+$ ./rhsm-api-client.py -u 'MyRHNUsername' -p 'MyRHNPassword' -c 'MyClientID' -s 'MyClientSecret' systems -o /path/to/systems.csv -l 100
 ```
 
 ## Authors

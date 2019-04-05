@@ -98,6 +98,7 @@ def add_erratas_command_options(subparsers):
     erratas_parser = subparsers.add_parser('erratas',
                                          help='Generate erratas CSV report.')
 
+
 def add_packages_command_options(subparsers):
     systems_parser = subparsers.add_parser('packages',
                                          help='Generate packages CSV report.')
