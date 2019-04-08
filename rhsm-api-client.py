@@ -55,7 +55,7 @@ import argparse
 import time
 import sys
 import os
-from redhat import rhauth, rhsmapi, systems
+from rhsm import rhauth, rhsmapi, systems
 
 
 def output_file_check(csv_filename):
@@ -68,10 +68,15 @@ def output_file_check(csv_filename):
             sys.exit(time.ctime() + ' - Please change output filename path if you don\'t want to override existing '
                                     'file %s.' % csv_filename)
         elif text.lower() == "y":
-            with open(csv_filename, 'w') as csvfile:
-                csv_writer = csv.writer(csvfile, delimiter=',')
-                csv_writer.writerow(['Name','UUID', 'Subscriptions Attached', 'Type', 'Cloud Provider', 'Status',
-                                    'Last Check in', 'Security Advisories', 'Bug Fixes', 'Enhancements'])
+            write_header = True
+    else:
+        write_header = True
+
+    if write_header is True:
+        with open(csv_filename, 'w') as csvfile:
+            csv_writer = csv.writer(csvfile, delimiter=',')
+            csv_writer.writerow(['Name', 'UUID', 'Subscriptions Attached', 'Type', 'Cloud Provider', 'Status',
+                                 'Last Check in', 'Security Advisories', 'Bug Fixes', 'Enhancements'])
 
 
 def add_systems_command_options(subparsers):
@@ -136,7 +141,10 @@ def run_systems(args):
                                              system['href'], system['lastCheckin'], system['name'], system['type'],
                                              system['uuid'])
 
-                this_system.print_system_to_csv(args.output_csv)
+                with open(args.output_csv, 'a') as csv_file:
+                    csv_writer = csv.writer(csv_file, delimiter=',')
+                    csv_writer.writerow(this_system.get_csv_format())
+
                 all_systems.append(this_system)
         else:
             break

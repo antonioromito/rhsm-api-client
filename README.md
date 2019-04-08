@@ -60,7 +60,7 @@ $ sudo yum install python2-requests-oauthlib
 If you are running an EL7 version, please visit here to get the newest 'epel-release' package for EL7: [The newest version of 'epel-release' for EL7](https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm)
 
 ```
-$ sudo rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+$ sudo yum localinstall https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 ```
     
 * Install git

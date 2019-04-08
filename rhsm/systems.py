@@ -1,6 +1,3 @@
-import csv
-
-
 class Systems:
     def __init__(self, pagination, body):
         self.pagination = pagination
@@ -46,12 +43,11 @@ class System:
         self.bugfixCount = self.errataCounts['bugfixCount']
         self.enhancementCount = self.errataCounts['enhancementCount']
 
-    def print_system_to_csv(self, csv_filename):
-        with open(csv_filename, 'a') as csvfile:
-            csv_writer = csv.writer(csvfile, delimiter=',')
-            csv_writer.writerow([self.name, self.uuid, self.enhancementCount, self.type, "Not Available",
+    def get_csv_format(self):
+        csv_format_output = [self.name, self.uuid, self.enhancementCount, self.type, "Not Available",
                                  self.entitlementStatus, self.lastCheckin, self.securityCount, self.bugfixCount,
-                                 self.enhancementCount])
+                                 self.enhancementCount]
+        return csv_format_output
 
     def __repr__(self):
         return ('Name: %s UUID: %s Subscriptions Attached: %d Type: %s Cloud Provider: %s Status: %s '
