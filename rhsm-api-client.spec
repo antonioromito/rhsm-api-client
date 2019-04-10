@@ -3,11 +3,11 @@ Name: rhsm-api-client
 Version: 1.0
 Release: 1%{?dist}
 Group: Applications/System
-Source0:
+Source0: https://github.com/antonioromito/rhsm-api-client
 License: GPLv2+
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildArch: noarch
-Url:
+Url: https://github.com/antonioromito/rhsm-api-client
 BuildRequires: python-devel
 BuildRequires: python-six
 Requires: python-oauthlib
