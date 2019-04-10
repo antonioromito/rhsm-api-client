@@ -3,7 +3,7 @@ Name: rhsm-api-client
 Version: 1.0
 Release: 1%{?dist}
 Group: Applications/System
-Source0: https://github.com/antonioromito/rhsm-api-client
+Source0: https://github.com/antonioromito/rhsm-api-client/archive/
 License: GPLv2+
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildArch: noarch
