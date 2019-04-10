@@ -11,9 +11,10 @@ Url:
 BuildRequires: python-devel
 BuildRequires: python-six
 Requires: python-oauthlib
+Requires: python-requests-oauthlib
 Requires: python-requests
 Requires: python-six
-Requires: python-requests-oauthlib
+
 
 %description
 Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
