@@ -24,6 +24,7 @@ Requires:  python3-oauthlib
 Requires:  python3-requests-oauthlib
 Requires:  python3-requests
 Requires:  python3-six
+%endif
 
 %description
 Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
