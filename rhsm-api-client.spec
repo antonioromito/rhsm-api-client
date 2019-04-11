@@ -62,6 +62,6 @@ popd
 %{_sbindir}/rhsm-api-client
 %{python3_sitelib}/rhsm-api-client-%{version}.egg-info
 %{python3_sitelib}/rhsm
-endif
+%endif
 
 %changelog
