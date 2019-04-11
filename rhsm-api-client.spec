@@ -3,7 +3,7 @@ Name: rhsm-api-client
 Version: 1.0
 Release: 1%{?dist}
 Group: Applications/System
-Source0: https://github.com/antonioromito/rhsm-api-client/archive/
+Source0: %{name}-%{version}.tar.gz
 License: GPLv2+
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildArch: noarch
@@ -20,22 +20,23 @@ Requires: python-six
 Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
 
 %prep
-%setup -q
+%setup -qn %{name}-%{version}
 
 %build
-make
 
 %install
 rm -rf ${RPM_BUILD_ROOT}
-make DESTDIR=${RPM_BUILD_ROOT} install
-%find_lang %{name} || echo 0
+mkdir -p %{buildroot}/%{_sbindir}
+mkdir -p %{buildroot}/%{_datadir}
+cp -rp %{buildroot}/../../BUILD/%{name}-%{version}/rhsm-api-client %{buildroot}/%{_sbindir}
+cp -rp %{buildroot}/../../BUILD/%{name}-%{version}/rhsm	%{buildroot}/%{_datadir}
 
 %clean
-rm -rf ${RPM_BUILD_ROOT}
 
-%files -f %{name}.lang
-%defattr(-,root,root,-)
+%files
 %{_sbindir}/rhsm-api-client
-%{_datadir}/%{name}
-%{python_sitelib}/*
+%{_datadir}/rhsm
+
 %doc AUTHORS README.md LICENSE
+
+%changelog
