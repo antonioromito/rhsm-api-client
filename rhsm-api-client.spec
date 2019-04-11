@@ -1,3 +1,5 @@
+%global with_python3 0
+
 Summary: Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
 Name: rhsm-api-client
 Version: 1.0
@@ -8,13 +10,20 @@ License: GPLv2+
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildArch: noarch
 Url: https://github.com/antonioromito/rhsm-api-client
-BuildRequires: python-devel
-BuildRequires: python-six
-Requires: python-oauthlib
-Requires: python-requests-oauthlib
-Requires: python-requests
-Requires: python-six
+BuildRequires:  python2-devel
+BuildRequires:  python2-setuptools
+Requires: python2-oauthlib
+Requires: python2-requests-oauthlib
+Requires: python2-requests
+Requires: python2-six
 
+%if 0%{?with_python3}
+BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
+Requires:  python3-oauthlib
+Requires:  python3-requests-oauthlib
+Requires:  python3-requests
+Requires:  python3-six
 
 %description
 Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
@@ -23,20 +32,36 @@ Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from
 %setup -qn %{name}-%{version}
 
 %build
+%{__python2} setup.py build
+%if 0%{?with_python3}
+pushd %{py3dir}
+%{__python3} setup.py build
+popd
+%endif
 
 %install
-rm -rf ${RPM_BUILD_ROOT}
-mkdir -p %{buildroot}/%{_sbindir}
-mkdir -p %{buildroot}/%{_datadir}
-cp -rp %{buildroot}/../../BUILD/%{name}-%{version}/rhsm-api-client %{buildroot}/%{_sbindir}
-cp -rp %{buildroot}/../../BUILD/%{name}-%{version}/rhsm	%{buildroot}/%{_datadir}
+%if 0%{?with_python3}
+pushd %{py3dir}
+%{__python3} setup.py install -O1 --skip-build --root %{buildroot}
+cp -a %{buildroot}%{_bindir}/rhsm-api-client %{buildroot}%{_bindir}/rhsm-api-client-%{python3_version}
+popd
+%endif
+%{__python2} setup.py install -O1 --skip-build --root %{buildroot}
 
 %clean
 
 %files
-%{_sbindir}/rhsm-api-client
-%{_datadir}/rhsm
-
 %doc AUTHORS README.md LICENSE
+%{_sbindir}/rhsm-api-client
+%{python2_sitelib}/rhsm
+%{python2_sitelib}/rhsm-api-client-%{version}.egg-info
+
+%if 0%{?with_python3}
+%files
+%doc AUTHORS README.md LICENSE
+%{_sbindir}/rhsm-api-client
+%{python3_sitelib}/rhsm-api-client-%{version}.egg-info
+%{python3_sitelib}/rhsm
+endif
 
 %changelog
