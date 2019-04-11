@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='rhsm-api-client',
-    version='1.0',
+    version='0.0.1',
     packages=['', 'rhsm'],
     url='https://github.com/antonioromito/rhsm-api-client',
     license='GPLv2+',
