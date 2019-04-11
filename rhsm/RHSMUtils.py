@@ -19,14 +19,14 @@ class CSVReport(object):
         if os.path.isfile(self.filename):
             return True
 
-    def write_header(self, *args):
-        _header = list(args)
+    def write_header(self, row):
+        _header = row
         with open(self.filename, 'w') as csv_file:
             csv_writer = csv.writer(csv_file, delimiter=',')
             csv_writer.writerow(_header)
 
-    def add_row(self, *args):
-        _row = list(args)
+    def add_row(self, row ):
+        _row = row
         with open(self.filename, 'a') as csv_file:
             csv_writer = csv.writer(csv_file, delimiter=',')
             csv_writer.writerow(_row)
