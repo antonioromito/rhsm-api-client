@@ -44,7 +44,7 @@ popd
 %if 0%{?with_python3}
 pushd %{py3dir}
 %{__python3} setup.py install -O1 --skip-build --root %{buildroot}
-cp -a %{buildroot}%{_sbindir}/rhsm-api-client %{buildroot}%{_sbindir}/rhsm-api-client-%{python3_version}
+cp -a %{buildroot}%{_bindir}/rhsm-api-client %{buildroot}%{_sbindir}/rhsm-api-client-%{python3_version}
 popd
 %endif
 %{__python2} setup.py install -O1 --skip-build --root %{buildroot}
@@ -53,15 +53,15 @@ popd
 
 %files
 %doc AUTHORS README.md LICENSE
-%{_sbindir}/rhsm-api-client
+%{_bindir}/rhsm-api-client
 %{python2_sitelib}/rhsm
-%{python2_sitelib}/rhsm-api-client-%{version}-py%{python2_version}.egg-info
+%{python2_sitelib}/rhsm_api_client-%{version}-py%{python2_version}.egg-info
 
 %if 0%{?with_python3}
 %files
 %doc AUTHORS README.md LICENSE
-%{_sbindir}/rhsm-api-client
-%{python3_sitelib}/rhsm-api-client-%{version}-py%{python3_version}.egg-info
+%{_bindir}/rhsm-api-client
+%{python3_sitelib}/rhsm_api_client-%{version}-py%{python3_version}.egg-info
 %{python3_sitelib}/rhsm
 %endif
 
