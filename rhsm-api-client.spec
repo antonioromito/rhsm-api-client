@@ -1,3 +1,5 @@
+%global upname rhsm-api-client
+
 %if 0%{?fedora} || 0%{?rhel} >= 8
 %global with_python3 1
 %else
@@ -11,7 +13,7 @@
 %endif
 
 Summary: Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
-Name: rhsm-api-client
+Name: python-%{upname}
 Version: 1.0
 Release: 1%{?dist}
 Group: Applications/System
@@ -20,14 +22,19 @@ License: GPLv2+
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildArch: noarch
 Url: https://github.com/antonioromito/rhsm-api-client
+
+%if 0%{?with_python2}
+%package -n python2-%{upname}
 BuildRequires:  python2-devel
 BuildRequires:  python2-setuptools
 Requires: python2-oauthlib
 Requires: python2-requests-oauthlib
 Requires: python2-requests
 Requires: python2-six
+%endif
 
 %if 0%{?with_python3}
+%package -n python3-%{upname}
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
 Requires:  python3-oauthlib
@@ -57,8 +64,10 @@ popd
 %{__python2} setup.py install -O1 --skip-build --root %{buildroot}
 %endif
 %if 0%{?with_python3}
+pushd %{py3dir}
  %{__python3} setup.py install -O1 --skip-build --root %{buildroot}
 cp -a %{buildroot}%{_bindir}/rhsm-api-client %{buildroot}%{_sbindir}/rhsm-api-client-%{python3_version}
+popd
 %endif
 
 
