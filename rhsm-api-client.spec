@@ -12,29 +12,29 @@
 %global with_python2 1
 %endif
 
-Summary: Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
 Name: python-%{upname}
 Version: 1.0
 Release: 1%{?dist}
-Group: Applications/System
-Source0: %{name}-%{version}.tar.gz
+Summary: Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
 License: GPLv2+
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
-BuildArch: noarch
-Url: https://github.com/antonioromito/rhsm-api-client
 
-%if 0%{?with_python2}
-%package -n python2-%{upname}
+Url: https://github.com/antonioromito/rhsm-api-client
+Source0: %{name}-%{version}.tar.gz
+
+Group: Applications/System
+BuildArch: noarch
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:  python2-devel
 BuildRequires:  python2-setuptools
 Requires: python2-oauthlib
 Requires: python2-requests-oauthlib
 Requires: python2-requests
 Requires: python2-six
-%endif
+
 
 %if 0%{?with_python3}
 %package -n python3-%{upname}
+Summary: Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
 Requires:  python3-oauthlib
@@ -43,11 +43,16 @@ Requires:  python3-requests
 Requires:  python3-six
 %endif
 
-%description
-Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
-
 %prep
-%setup -qn %{name}-%{version}
+%setup -qn %{upname}-%{version}
+
+%if 0%{?with_python3}
+rm -rf %{py3dir}
+cp -a . %{py3dir}
+find %{py3dir} -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python3}|'
+%endif # with_python3
+
+find -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python2}|'
 
 %build
 %if 0%{?with_python2}
@@ -60,9 +65,6 @@ popd
 %endif
 
 %install
-%if 0%{?with_python2}
-%{__python2} setup.py install -O1 --skip-build --root %{buildroot}
-%endif
 %if 0%{?with_python3}
 pushd %{py3dir}
  %{__python3} setup.py install -O1 --skip-build --root %{buildroot}
@@ -70,17 +72,18 @@ cp -a %{buildroot}%{_bindir}/rhsm-api-client %{buildroot}%{_sbindir}/rhsm-api-cl
 popd
 %endif
 
+%{__python2} setup.py install -O1 --skip-build --root %{buildroot}
 
 %clean
 
 %files
-%if 0%{?with_python2}
 %doc AUTHORS README.md LICENSE
 %{_bindir}/rhsm-api-client
 %{python2_sitelib}/rhsm
 %{python2_sitelib}/rhsm_api_client-%{version}-py%{python2_version}.egg-info
-%endif
+
 %if 0%{?with_python3}
+%files -n python3-%{upname}
 %doc AUTHORS README.md LICENSE
 %{_bindir}/rhsm-api-client
 %{python3_sitelib}/rhsm_api_client-%{version}-py%{python3_version}.egg-info
