@@ -1,5 +1,4 @@
 %global upname rhsm-api-client
-%global myhome /home/aromito/rpmbuild
 
 %if 0%{?fedora} || 0%{?rhel} >= 8
 %global with_python3 1
@@ -24,7 +23,7 @@ Source0: %{upname}-%{version}.tar.gz
 
 Group: Applications/System
 BuildArch: noarch
-BuildRoot: %{myhome}/%{name}-%{version}-%{release}-buildroot
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:  python2-devel
 BuildRequires:  python2-setuptools
 Requires: python2-oauthlib
