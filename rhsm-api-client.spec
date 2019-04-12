@@ -91,7 +91,7 @@ popd
 %if 0%{?with_python3}
 %files -n python3-%{upname}
 %doc AUTHORS README.md LICENSE
-%{_bindir}/rhsm-api-client
+%{_bindir}/rhsm-api-client-%{python3_version}
 %{python3_sitelib}/rhsm_api_client-%{version}-py%{python3_version}.egg-info
 %{python3_sitelib}/rhsm
 %endif
