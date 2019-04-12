@@ -31,6 +31,9 @@ Requires: python2-requests-oauthlib
 Requires: python2-requests
 Requires: python2-six
 
+%description
+Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
+
 
 %if 0%{?with_python3}
 %package -n python3-%{upname}
@@ -41,6 +44,10 @@ Requires:  python3-oauthlib
 Requires:  python3-requests-oauthlib
 Requires:  python3-requests
 Requires:  python3-six
+
+%description -n python3-%{upname}
+Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
+
 %endif
 
 %prep
