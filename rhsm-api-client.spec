@@ -74,7 +74,6 @@ popd
 %{python2_sitelib}/rhsm_api_client-%{version}-py%{python2_version}.egg-info
 %endif
 %if 0%{?with_python3}
-%files
 %doc AUTHORS README.md LICENSE
 %{_bindir}/rhsm-api-client
 %{python3_sitelib}/rhsm_api_client-%{version}-py%{python3_version}.egg-info
