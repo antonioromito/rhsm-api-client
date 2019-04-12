@@ -12,7 +12,7 @@
 %global with_python2 1
 %endif
 
-Name: python-%{upname}
+Name: python2-%{upname}
 Version: 1.0
 Release: 1%{?dist}
 Summary: Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
@@ -74,7 +74,7 @@ popd
 %if 0%{?with_python3}
 pushd %{py3dir}
  %{__python3} setup.py install -O1 --skip-build --root %{buildroot}
-cp -a %{buildroot}%{_bindir}/rhsm-api-client %{buildroot}%{_bindir}/rhsm-api-client-%{python3_version}
+cp -a %{buildroot}%{_bindir}/rhsm-api-client %{buildroot}%{_bindir}/rhsm-api-client-py%{python3_version}
 popd
 %endif
 
@@ -91,7 +91,7 @@ popd
 %if 0%{?with_python3}
 %files -n python3-%{upname}
 %doc AUTHORS README.md LICENSE
-%{_bindir}/rhsm-api-client-%{python3_version}
+%{_bindir}/rhsm-api-client-py%{python3_version}
 %{python3_sitelib}/rhsm_api_client-%{version}-py%{python3_version}.egg-info
 %{python3_sitelib}/rhsm
 %endif
