@@ -1,4 +1,5 @@
 %global upname rhsm-api-client
+%global myhome /home/aromito/rpmbuild
 
 %if 0%{?fedora} || 0%{?rhel} >= 8
 %global with_python3 1
@@ -23,17 +24,15 @@ Source0: %{upname}-%{version}.tar.gz
 
 Group: Applications/System
 BuildArch: noarch
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
+BuildRoot: %{myhome}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:  python2-devel
 BuildRequires:  python2-setuptools
 Requires: python2-oauthlib
 Requires: python2-requests-oauthlib
-Requires: python2-requests
 Requires: python2-six
 
 %description
 Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
-
 
 %if 0%{?with_python3}
 %package -n python3-%{upname}
@@ -42,7 +41,6 @@ BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
 Requires:  python3-oauthlib
 Requires:  python3-requests-oauthlib
-Requires:  python3-requests
 Requires:  python3-six
 
 %description -n python3-%{upname}
