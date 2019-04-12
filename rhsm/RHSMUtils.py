@@ -21,12 +21,14 @@ class CSVReport(object):
 
     def write_header(self, row):
         _header = row
+        print(type(_header))
         with open(self.filename, 'w') as csv_file:
             csv_writer = csv.writer(csv_file, delimiter=',')
             csv_writer.writerow(_header)
 
-    def add_row(self, row ):
+    def add_row(self, row):
         _row = row
+        print(type(_row))
         with open(self.filename, 'a') as csv_file:
             csv_writer = csv.writer(csv_file, delimiter=',')
             csv_writer.writerow(_row)
