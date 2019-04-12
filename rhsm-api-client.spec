@@ -19,7 +19,7 @@ Summary: Red Hat Subscription Manager (RHSM) APIs client interface to collect a 
 License: GPLv2+
 
 Url: https://github.com/antonioromito/rhsm-api-client
-Source0: %{name}-%{version}.tar.gz
+Source0: %{upname}-%{version}.tar.gz
 
 Group: Applications/System
 BuildArch: noarch
@@ -55,9 +55,8 @@ find %{py3dir} -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python3}|'
 find -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python2}|'
 
 %build
-%if 0%{?with_python2}
 %{__python2} setup.py build
-%endif
+
 %if 0%{?with_python3}
 pushd %{py3dir}
 %{__python3} setup.py build
