@@ -2,7 +2,7 @@
 
 %if 0%{?fedora} || (0%{?rhel} && 0%{?rhel} > 7)
 %global		    with_python3    1
-%global		    with_python2    0
+%global		    with_python2    1
 %else
 %global         with_python3    0
 %global         with_python2    1
@@ -25,20 +25,18 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	python2-devel
 BuildRequires:  python2-setuptools
 Requires:	    python
-Requires:       python-oauthlib
-Requires:       python-requests-oauthlib
-Requires:       python-six
+Requires:       python2-oauthlib
+Requires:       python2-requests-oauthlib
+Requires:       python2-six
 %endif
 
 %if 0%{?with_python3}
 BuildRequires:	python3-devel
 BuildRequires:  python3-setuptools
-Requires:       python3
 Requires:       python3-oauthlib
 Requires:       python3-requests-oauthlib
 Requires:       python3-six
 %endif
-
 
 %description
 Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
@@ -52,11 +50,6 @@ Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from
 
 %prep
 %setup -qn      %{upname}-%{version}
-
-%if 0%{?with_python3}
-rm -rf %{py3dir}
-cp -a . %{py3dir}
-%endif # with_python3
 
 %if 0%{?with_python2}
 %build
