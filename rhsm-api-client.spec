@@ -1,9 +1,5 @@
 %global upname rhsm-api-client
 
-%{!?py2_build:		%global py2_build		CFLAGS="%{optflags}" /usr/bin/python2 setup.py  build --executable="/usr/bin/python2 -s"}
-%{!?py2_install:	%global py2_install		CFLAGS="%{optflags}" /usr/bin/python2 setup.py  install -O1 --skip-build --root %{buildroot}}
-%{!?py3_build:		%global py3_build		CFLAGS="%{optflags}" /usr/bin/python3 setup.py  build --executable="/usr/bin/python3 -s"}
-%{!?py3_install:	%global py3_install		CFLAGS="%{optflags}" /usr/bin/python3 setup.py  install -O1 --skip-build --root %{buildroot}}
 
 %if 0%{?fedora} || (0%{?rhel} && 0%{?rhel} >= 7)
 %global		with_python3	1
@@ -71,7 +67,8 @@ popd
 %endif
 
 %files -n python2-%{upname}
-%{_bindir}/%{upname}
+
+%exclude %{_bindir}/%{upname}
 %{python2_sitelib}/rhsm
 %{python2_sitelib}/rhsm_api_client-%{version}-py%{python2_version}.egg-info
 %doc AUTHORS README.md
