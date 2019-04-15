@@ -16,8 +16,8 @@ Source0: %{upname}-%{version}.tar.gz
 Group: Applications/System
 BuildArch: noarch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
-BuildRequires:  python*-devel
-BuildRequires:  python*-setuptools
+BuildRequires:  python-devel
+BuildRequires:  python-setuptools
 Requires: python2-oauthlib
 Requires: python2-requests-oauthlib
 Requires: python2-six
