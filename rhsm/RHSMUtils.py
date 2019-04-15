@@ -11,6 +11,7 @@ import os
 import csv
 import six
 
+
 class CSVReport(object):
     def __init__(self, filename):
         self.filename = filename
@@ -23,9 +24,10 @@ class CSVReport(object):
         header_keys = keys
         print(type(header_keys))
         if six.PY3:
-            with open(self.filename, 'wt') as csv_file:
+            with open(self.filename, 'w', newline='') as csv_file:
                 csv_writer = csv.writer(csv_file, delimiter=',')
                 csv_writer.writerow(header_keys)
+        else:
             with open(self.filename, 'wb') as csv_file:
                 csv_writer = csv.writer(csv_file, delimiter=',')
                 csv_writer.writerow(header_keys)
@@ -34,7 +36,7 @@ class CSVReport(object):
         row_keys = keys
         print(type(row_keys))
         if six.PY3:
-            with open(self.filename, 'at') as csv_file:
+            with open(self.filename, 'a', newline='') as csv_file:
                 csv_writer = csv.writer(csv_file, delimiter=',')
                 csv_writer.writerow(row_keys)
         else:
