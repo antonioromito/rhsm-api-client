@@ -60,8 +60,6 @@ pushd %{py3dir}
 popd
 %endif
 
-
-
 %install
 %{py2_install}
 
@@ -70,13 +68,6 @@ pushd %{py3dir}
 %{py3_install}
 cp -a %{buildroot}%{_bindir}/%{upname} %{buildroot}%{_bindir}/python3-%{upname}
 popd
-%endif
-
-%check
-%{__python2} setup.py nosetests
-
-%if 0%{?with_python3}
-%{__python3} setup.py nosetests
 %endif
 
 
