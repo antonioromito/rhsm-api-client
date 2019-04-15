@@ -51,13 +51,13 @@ Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from
 %prep
 %setup -qn %{upname}-%{version}
 
+find %{py2dir} -name '*.py' | xargs sed -i '1s|^#!.*|#!%{__python2}|'
+
 %if 0%{?with_python3}
 rm -rf %{py3dir}
 cp -a . %{py3dir}
-find %{py3dir} -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python3}|'
+find %{py3dir} -name '*.py' | xargs sed -i '1s|^#!.*|#!%{__python3}|'
 %endif # with_python3
-
-find -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python2}|'
 
 %build
 %{__python2} setup.py build
