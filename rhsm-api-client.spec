@@ -76,14 +76,13 @@ popd
 %if 0%{?with_python3}
 pushd %{py3dir}
 %{py3_install}
-cat %{buildroot}%{_bindir}/%{upname}
 cp -a %{buildroot}%{_bindir}/%{upname} %{buildroot}%{_bindir}/python3-%{upname}
-cp -a %{buildroot}%{_bindir}/%{upname} %{buildroot}%{_bindir}/python34-%{upname}
 popd
 %endif
 
 %if 0%{?with_python2}
 %files -n python2-%{upname}
+%exclude %{_bindir}/python3-%{upname}
 %{_bindir}/%{upname}
 %{python2_sitelib}/rhsm
 %{python2_sitelib}/rhsm_api_client-%{version}-py%{python2_version}.egg-info
@@ -95,6 +94,7 @@ popd
 %if 0%{?with_python3}
 %if 0%{?fedora}
 %files -n python3-%{upname}
+%exclude %{_bindir}/%{upname}
 %{_bindir}/python3-%{upname}
 %{python3_sitelib}/rhsm_api_client-%{version}-py%{python3_version}.egg-info
 %{python3_sitelib}/rhsm
@@ -104,6 +104,7 @@ popd
 
 %if 0%{?rhel} && 0%{?rhel} >= 7
 %files -n python34-%{upname}
+%exclude %{_bindir}/%{upname}
 %{_bindir}/python34-%{upname}
 %{python3_sitelib}/rhsm_api_client-%{version}-py%{python3_version}.egg-info
 %{python3_sitelib}/rhsm
