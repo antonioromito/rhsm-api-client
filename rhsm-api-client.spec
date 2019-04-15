@@ -48,7 +48,7 @@ cp -a . %{py3dir}
 %endif # with_python3
 
 %build
-%{py2_build}
+%{__python} setup.py build
 
 %if 0%{?with_python3}
 pushd %{py3dir}
@@ -57,7 +57,7 @@ popd
 %endif
 
 %install
-%{py2_install}
+%{__python} setup.py install --skip-build --root %{buildroot}
 
 %if 0%{?with_python3}
 pushd %{py3dir}
