@@ -83,6 +83,7 @@ popd
 
 %if 0%{?fedora}
 %files -n python3-%{upname}
+%{_bindir}/python3-%{upname}
 %{python3_sitelib}/rhsm_api_client-%{version}-py%{python3_version}.egg-info
 %{python3_sitelib}/rhsm
 %doc AUTHORS README.md
@@ -91,6 +92,7 @@ popd
 
 %if 0%{?rhel} && 0%{?rhel} >= 7
 %files -n python34-%{upname}
+%{_bindir}/python34-%{upname}
 %{python3_sitelib}/rhsm_api_client-%{version}-py%{python3_version}.egg-info
 %{python3_sitelib}/rhsm
 %doc AUTHORS README.md
