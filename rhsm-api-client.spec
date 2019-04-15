@@ -34,9 +34,9 @@ Requires:       python-six
 BuildRequires:	python3-devel
 BuildRequires:  python3-setuptools
 Requires:       python3
-Requires:       python-oauthlib
-Requires:       python-requests-oauthlib
-Requires:       python-six
+Requires:       python3-oauthlib
+Requires:       python3-requests-oauthlib
+Requires:       python3-six
 %endif
 
 
