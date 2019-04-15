@@ -51,7 +51,7 @@ Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from
 %prep
 %setup -qn %{upname}-%{version}
 
-find -name '*.py' | xargs sed -i '1s|^#!.*|#!%{__python2}|'
+find . -name '*.py' | xargs sed -i '1s|^#!.*|#!%{__python2}|'
 
 %if 0%{?with_python3}
 rm -rf %{py3dir}
@@ -83,7 +83,7 @@ popd
 %files
 %doc AUTHORS README.md LICENSE
 %{_bindir}/rhsm-api-client
-%{python2_sitelib}/%{upname}
+%{python2_sitelib}/rhsm
 %{python2_sitelib}/%{upname}-%{version}-py%{python2_version}.egg-info
 
 %if 0%{?with_python3}
@@ -91,7 +91,7 @@ popd
 %doc AUTHORS README.md LICENSE
 %{_bindir}/rhsm-api-client-py%{python3_version}
 %{python3_sitelib}/%{upname}-%{version}-py%{python3_version}.egg-info
-%{python3_sitelib}/%{upname}
+%{python3_sitelib}/rhsm
 %endif
 
 %changelog
