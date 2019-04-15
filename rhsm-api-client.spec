@@ -84,14 +84,14 @@ popd
 %doc AUTHORS README.md LICENSE
 %{_bindir}/rhsm-api-client
 %{python2_sitelib}/rhsm
-%{python2_sitelib}/rhsm-api-client-%{version}-py%{python2_version}.egg-info
+%{python2_sitelib}/rhsm_api_client-%{version}-py%{python2_version}.egg-info
 
 %if 0%{?with_python3}
 %files -n python3-%{upname}
 %doc AUTHORS README.md LICENSE
 %{_bindir}/rhsm-api-client-py%{python3_version}
-%{python3_sitelib}/rhsm-api-client-%{version}-py%{python3_version}.egg-info
 %{python3_sitelib}/rhsm
+%{python3_sitelib}/rhsm_api_client-%{version}-py%{python3_version}.egg-info
 %endif
 
 %changelog
