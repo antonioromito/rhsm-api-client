@@ -61,10 +61,12 @@ find %{py3dir} -name '*.py' | xargs sed -i '1s|^#!.*|#!%{__python3}|'
 
 %build
 %{__python2} setup.py build
+echo ">>>>>>>>>>>>>>>>>>>>>> %{__python2}"
 
 %if 0%{?with_python3}
 pushd %{py3dir}
 %{__python3} setup.py build
+echo ">>>>>>>>>>>>>>>>>>>>>> %{__python2}"
 popd
 %endif
 
