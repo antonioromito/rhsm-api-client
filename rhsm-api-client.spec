@@ -16,8 +16,8 @@ Source0: %{upname}-%{version}.tar.gz
 Group: Applications/System
 BuildArch: noarch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
-BuildRequires:  python2-devel
-BuildRequires:  python2-setuptools
+BuildRequires:  python*-devel
+BuildRequires:  python*-setuptools
 Requires: python2-oauthlib
 Requires: python2-requests-oauthlib
 Requires: python2-six
@@ -67,7 +67,6 @@ popd
 %endif
 
 %files -n python2-%{upname}
-
 %exclude %{_bindir}/%{upname}
 %{python2_sitelib}/rhsm
 %{python2_sitelib}/rhsm_api_client-%{version}-py%{python2_version}.egg-info
