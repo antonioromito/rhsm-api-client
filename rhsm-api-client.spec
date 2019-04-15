@@ -70,9 +70,8 @@ cp -a %{buildroot}%{_bindir}/%{upname} %{buildroot}%{_bindir}/python3-%{upname}
 popd
 %endif
 
-
 %files -n python2-%{upname}
-%exclude %{_bindir}/%{upname}*
+%{_bindir}/python2-%{upname}
 %{python2_sitelib}/rhsm
 %{python2_sitelib}/rhsm_api_client-%{version}-py%{python2_version}.egg-info
 %doc AUTHORS README.md
