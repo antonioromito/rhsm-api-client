@@ -57,8 +57,10 @@ rm -rf %{py3dir}
 cp -a . %{py3dir}
 %endif # with_python3
 
+%if 0%{?with_python2}
 %build
 %{py2_build}
+%endif
 
 %if 0%{?with_python3}
 pushd %{py3dir}
@@ -66,8 +68,10 @@ pushd %{py3dir}
 popd
 %endif
 
+%if 0%{?with_python2}
 %install
 %{py2_install}
+%endif
 
 %if 0%{?with_python3}
 pushd %{py3dir}
