@@ -80,12 +80,14 @@ cp -a %{buildroot}%{_bindir}/%{upname} %{buildroot}%{_bindir}/python3-%{upname}
 popd
 %endif
 
+%if 0%{?with_python2}
 %files -n python2-%{upname}
 %exclude %{_bindir}/%{upname}
 %{python2_sitelib}/rhsm
 %{python2_sitelib}/rhsm_api_client-%{version}-py%{python2_version}.egg-info
 %doc AUTHORS README.md
 %license LICENSE
+%endif
 
 
 %if 0%{?with_python3}
