@@ -51,6 +51,11 @@ Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from
 %prep
 %setup -qn      %{upname}-%{version}
 
+%if 0%{?with_python3}
+rm -rf %{py3dir}
+cp -a . %{py3dir}
+%endif # with_python3
+
 %build
 %if 0%{?with_python2}
 %{py2_build}
