@@ -51,8 +51,8 @@ Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from
 %prep
 %setup -qn      %{upname}-%{version}
 
-%if 0%{?with_python2}
 %build
+%if 0%{?with_python2}
 %{py2_build}
 %endif
 
