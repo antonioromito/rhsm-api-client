@@ -54,11 +54,11 @@ class System:
         self.bugfixCount = self.errataCounts['bugfixCount']
         self.enhancementCount = self.errataCounts['enhancementCount']
 
-    def get_csv_format(self):
-        csv_format_output = [self.name, self.uuid, self.enhancementCount, self.type, "Not Available",
+    def get_keys(self):
+        keys = [self.name, self.uuid, self.enhancementCount, self.type, "Not Available",
                                  self.entitlementStatus, self.lastCheckin, self.securityCount, self.bugfixCount,
                                  self.enhancementCount]
-        return csv_format_output
+        return keys
 
     def __repr__(self):
         return ('Name: %s UUID: %s Subscriptions Attached: %d Type: %s Cloud Provider: %s Status: %s '

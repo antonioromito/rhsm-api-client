@@ -79,7 +79,7 @@ class RHSMClient(object):
                                                      system['href'], system['lastCheckin'], system['name'], system['type'],
                                                      system['uuid'])
 
-                    csv_file.add_row(this_system.get_csv_format())
+                    csv_file.add_row(this_system.get_keys())
 
                     all_systems.append(this_system)
             else:
