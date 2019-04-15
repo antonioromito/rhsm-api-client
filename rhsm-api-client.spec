@@ -1,4 +1,3 @@
-%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 %global upname rhsm-api-client
 
 %{!?py2_build:		%global py2_build		CFLAGS="%{optflags}" /usr/bin/python2 setup.py  build --executable="/usr/bin/python2 -s"}
@@ -48,12 +47,12 @@ Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from
 %prep
 %setup -qn %{upname}-%{version}
 
-find . -name '*.py' | xargs sed -i '1s|^#!.*|#!%{__python2}'
+find . -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python2}'
 
 %if 0%{?with_python3}
 rm -rf %{py3dir}
 cp -a . %{py3dir}
-find %{py3dir} -name '*.py' | xargs sed -i '1s|^#!.*|#!%{__python3}'
+find %{py3dir} -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python3}'
 %endif # with_python3
 
 %build
