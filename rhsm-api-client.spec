@@ -1,8 +1,7 @@
 %global upname rhsm-api-client
 
-
 %if 0%{?fedora} || (0%{?rhel} && 0%{?rhel} >= 7)
-%global		with_python3	1
+%global		with_python3    1
 %endif
 
 Name: python2-%{upname}
@@ -17,8 +16,8 @@ Source0: %{upname}-%{version}.tar.gz
 Group: Applications/System
 BuildArch: noarch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
-BuildRequires:  python2-devel
-BuildRequires:  python2-setuptools
+BuildRequires:  python-devel
+BuildRequires:  python-setuptools
 Requires: python2-oauthlib
 Requires: python2-requests-oauthlib
 Requires: python2-six
@@ -50,6 +49,7 @@ cp -a . %{py3dir}
 
 %build
 %{py2_build}
+
 %if 0%{?with_python3}
 pushd %{py3dir}
 %{py3_build}
