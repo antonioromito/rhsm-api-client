@@ -71,7 +71,7 @@ popd
 %endif
 
 %files -n python2-%{upname}
-%{_bindir}/python2-%{upname}
+%{_bindir}/%{upname}
 %{python2_sitelib}/rhsm
 %{python2_sitelib}/rhsm_api_client-%{version}-py%{python2_version}.egg-info
 %doc AUTHORS README.md
