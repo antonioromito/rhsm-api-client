@@ -20,8 +20,8 @@ class CSVReport(object):
         if os.path.isfile(self.filename):
             return True
 
-    def write_header(self, *keys):
-        header_keys = list(keys)
+    def write_header(self, keys):
+        header_keys = keys
         print(type(header_keys))
         if six.PY3:
             with open(self.filename, 'w', newline='') as csv_file:
@@ -32,8 +32,8 @@ class CSVReport(object):
                 csv_writer = csv.writer(csv_file, delimiter=',')
                 csv_writer.writerow(header_keys)
 
-    def add_row(self, *keys):
-        row_keys = list(keys)
+    def add_row(self, keys):
+        row_keys = keys
         print(type(row_keys))
         if six.PY3:
             with open(self.filename, 'a', newline='') as csv_file:

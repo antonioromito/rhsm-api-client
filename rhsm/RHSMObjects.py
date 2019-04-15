@@ -55,9 +55,8 @@ class System:
         self.enhancementCount = self.errataCounts['enhancementCount']
 
     def get_keys(self):
-        keys = [self.name, self.uuid, self.enhancementCount, self.type, "Not Available",
-                                 self.entitlementStatus, self.lastCheckin, self.securityCount, self.bugfixCount,
-                                 self.enhancementCount]
+        keys = [self.name, self.uuid, self.enhancementCount, self.type, "Not Available", self.entitlementStatus,
+                self.lastCheckin, self.securityCount, self.bugfixCount, self.enhancementCount]
         return keys
 
     def __repr__(self):
