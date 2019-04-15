@@ -9,7 +9,7 @@
 # See the LICENSE file in the source distribution for further information.
 import os
 import csv
-
+import six
 
 class CSVReport(object):
     def __init__(self, filename):
@@ -19,16 +19,26 @@ class CSVReport(object):
         if os.path.isfile(self.filename):
             return True
 
-    def write_header(self, row):
-        _header = row
-        print(type(_header))
-        with open(self.filename, 'w') as csv_file:
-            csv_writer = csv.writer(csv_file, delimiter=',')
-            csv_writer.writerow(_header)
+    def write_header(self, keys):
+        header_keys = keys
+        print(type(header_keys))
+        if six.PY3:
+            with open(self.filename, 'wt') as csv_file:
+                csv_writer = csv.writer(csv_file, delimiter=',')
+                csv_writer.writerow(header_keys)
+            with open(self.filename, 'wb') as csv_file:
+                csv_writer = csv.writer(csv_file, delimiter=',')
+                csv_writer.writerow(header_keys)
 
-    def add_row(self, row):
-        _row = row
-        print(type(_row))
-        with open(self.filename, 'a') as csv_file:
-            csv_writer = csv.writer(csv_file, delimiter=',')
-            csv_writer.writerow(_row)
+    def add_row(self, keys):
+        row_keys = keys
+        print(type(row_keys))
+        if six.PY3:
+            with open(self.filename, 'at') as csv_file:
+                csv_writer = csv.writer(csv_file, delimiter=',')
+                csv_writer.writerow(row_keys)
+        else:
+            with open(self.filename, 'ab') as csv_file:
+                csv_writer = csv.writer(csv_file, delimiter=',')
+                csv_writer.writerow(row_keys)
+
