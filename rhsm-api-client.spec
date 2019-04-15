@@ -16,8 +16,8 @@ Source0: %{upname}-%{version}.tar.gz
 Group: Applications/System
 BuildArch: noarch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
-BuildRequires:  python-devel
-BuildRequires:  python-setuptools
+BuildRequires:  python2-devel
+BuildRequires:  python2-setuptools
 Requires: python2-oauthlib
 Requires: python2-requests-oauthlib
 Requires: python2-six
@@ -48,7 +48,7 @@ cp -a . %{py3dir}
 %endif # with_python3
 
 %build
-%{__python} setup.py build
+%{py2_build}
 
 %if 0%{?with_python3}
 pushd %{py3dir}
@@ -57,7 +57,7 @@ popd
 %endif
 
 %install
-%{__python} setup.py install --skip-build --root %{buildroot}
+%{py2_install}
 
 %if 0%{?with_python3}
 pushd %{py3dir}
