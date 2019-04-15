@@ -54,39 +54,61 @@ cp -a . %{py3dir}
 
 %build
 %{py2_build}
-echo ">>>>>>>>>>>>>>>>>>>>>> %{__python2}"
-
 %if 0%{?with_python3}
 pushd %{py3dir}
 %{py3_build}
-echo ">>>>>>>>>>>>>>>>>>>>>> %{__python2}"
 popd
 %endif
 
+
+
 %install
+%{py2_install}
+
 %if 0%{?with_python3}
 pushd %{py3dir}
 %{py3_install}
-cp -a %{buildroot}%{_bindir}/rhsm-api-client %{buildroot}%{_bindir}/rhsm-api-client-py%{python3_version}
+cp -a %{buildroot}%{_bindir}/%{upname} %{buildroot}%{_bindir}/python3-%{upname}
 popd
 %endif
 
-%{py2_install}
-
-%clean
-
-%files
-%doc AUTHORS README.md LICENSE
-%{_bindir}/rhsm-api-client
-%{python2_sitelib}/rhsm
-%{python2_sitelib}/rhsm_api_client-%{version}-py%{python2_version}.egg-info
+%check
+%{__python2} setup.py nosetests
 
 %if 0%{?with_python3}
-%files -n python3-%{upname}
-%doc AUTHORS README.md LICENSE
-%{_bindir}/rhsm-api-client-py%{python3_version}
-%{python3_sitelib}/rhsm
-%{python3_sitelib}/rhsm_api_client-%{version}-py%{python3_version}.egg-info
+%{__python3} setup.py nosetests
 %endif
 
+
+%files -n python2-%{upname}
+%exclude %{_bindir}/%{upname}*
+%{python2_sitelib}/rhsm
+%{python2_sitelib}/rhsm_api_client-%{version}-py%{python2_version}.egg-info
+%doc AUTHORS README.md
+%license LICENSE
+
+
+%if 0%{?with_python3}
+
+%if 0%{?fedora}
+%files -n python3-%{upname}
+%{python3_sitelib}/rhsm_api_client-%{version}-py%{python3_version}.egg-info
+%{python3_sitelib}/rhsm
+%doc AUTHORS README.md
+%license LICENSE
+%endif
+
+%if 0%{?rhel} && 0%{?rhel} >= 7
+%files -n python34-%{upname}
+%{python3_sitelib}/rhsm_api_client-%{version}-py%{python3_version}.egg-info
+%{python3_sitelib}/rhsm
+%doc AUTHORS README.md
+%license LICENSE
+%endif
+
+%endif
+
+
 %changelog
+* Mon Apr 15 2019 Marcin Dulak <aromito@redhat.com> - 1.0-1
+- initial package
