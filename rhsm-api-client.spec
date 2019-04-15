@@ -1,6 +1,6 @@
 %global         upname          rhsm-api-client
 
-%if 0%{?fedora} || (0%{?rhel} && 0%{?rhel} >= 7)
+%if 0%{?fedora} || (0%{?rhel} && 0%{?rhel} > 7)
 %global		    with_python3    1
 %global		    with_python2    0
 %else
