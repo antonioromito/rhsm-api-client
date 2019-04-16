@@ -1,4 +1,8 @@
 %global         upname          rhsm-api-client
+%{!?py2_build: %global py2_build %{__python2} setup.py build}
+%{!?py2_install: %global py2_install %{__python2} setup.py install --skip-build --root %{buildroot}}
+%{!?py3_build: %global py3_build %{__python3} setup.py build}
+%{!?py3_install: %global py3_install %{__python3} setup.py install --skip-build --root %{buildroot}}
 
 %if 0%{?rhel} && 0%{?rhel} <= 7
 # Disable python 3 for RHEL <= 7
