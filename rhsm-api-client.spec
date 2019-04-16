@@ -64,9 +64,7 @@ Requires:       python3-six
 
 %build
 %if %{with python2}
-pushd %{py2dir}
 %{py2_build}
-popd
 %endif # with python2
 %if %{with python3}
 pushd %{py3dir}
@@ -76,12 +74,10 @@ popd
 
 %install
 %if %{with python2}
-pushd build-py2
 %{py2_install}
-popd
 %endif # with python2
 %if %{with python3}
-pushd build-py3
+pushd %{py3dir}
 %{py3_install}
 popd
 %endif
