@@ -36,7 +36,7 @@ Summary:        Red Hat Subscription Manager (RHSM) APIs client interface to col
 Requires:       python2-oauthlib
 Requires:       python2-requests-oauthlib
 Requires:       python2-six
-%{?python_provide:%python_provide python2-%{srcname}}
+%{?python_provide:%python_provide python%{python2_pkgversion}-%{srcname}}
 
 %description -n python2-%{upname}
 Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
@@ -46,7 +46,7 @@ Summary:        Red Hat Subscription Manager (RHSM) APIs client interface to col
 Requires:       python3-oauthlib
 Requires:       python3-requests-oauthlib
 Requires:       python3-six
-%{?python_provide:%python_provide python3-%{srcname}}
+%{?python_provide:%python_provide python%{python3_pkgversion}-%{srcname}}
 
 %description -n python3-%{upname}
 Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
