@@ -14,7 +14,10 @@ Group:          Applications/System
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{srcname}-%{version}-%{release}-buildroot
 BuildRequires:  python2-devel
+BuildRequires:  python2-setuptools
 BuildRequires:  python%{python3_pkgversion}-devel
+BuildRequires:  python%{python3_pkgversion}-setuptools
+
 
 #%if 0%{?with_python3_other}
 #BuildRequires:  python%{python3_other_pkgversion}-devel
