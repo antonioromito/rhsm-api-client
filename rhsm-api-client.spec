@@ -42,7 +42,7 @@ Requires:       python2-six
 %endif # with python2
 
 %if 0%{?with_python3}
-%package -n     python3-%{upname}
+%package -n python3-%{upname}
 Summary:        Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
 %description -n python3-%{upname}
 Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
