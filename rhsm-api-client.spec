@@ -1,23 +1,4 @@
 %global         upname          rhsm-api-client
-%{!?py2_build: %global py2_build %{__python2} setup.py build}
-%{!?py2_install: %global py2_install %{__python2} setup.py install --skip-build --root %{buildroot}}
-%{!?py3_build: %global py3_build %{__python3} setup.py build}
-%{!?py3_install: %global py3_install %{__python3} setup.py install --skip-build --root %{buildroot}}
-
-%if 0%{?rhel} && 0%{?rhel} <= 7
-# Disable python 3 for RHEL <= 7
-%global		    with_python3    0
-%global		    with_python2    1
-%endif
-%if 0%{?rhel} > 7 || 0%{?fedora} > 29
-# Disable python 2 build by default
-%global         with_python3    1
-%global         with_python2    0
-%endif
-%if 0%{?fedora} <= 29
-%global         with_python3    1
-%global         with_python2    1
-%endif
 
 Name:           python-%{upname}
 Version:        1.0
@@ -31,8 +12,19 @@ Source0:        %{name}-%{version}.tar.gz
 Group:          Applications/System
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{upname}-%{version}-%{release}-buildroot
-BuildRequires:  python-devel
-BuildRequires:  python-setuptools
+
+%if 0%{?rhel} > 7 || 0%{?fedora} >= 29
+BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
+%global with_python3    1
+%global with_python2    0
+%endif
+%if 0%{?rhel} <= 7 || 0%{?fedora} < 29
+BuildRequires:  python2-devel
+BuildRequires:  python2-setuptools
+%global with_python3    0
+%global with_python2    1
+%endif
 
 
 %description
@@ -65,24 +57,13 @@ Requires:       python3-six
 
 %prep
 %autosetup
-#%setup -qn      %{name}-%{version}
-
-#%if 0%{?with_python3}
-#rm -rf %{py3dir}
-#cp -a . %{py3dir}
-#find %{py3dir} -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python3}|'
-#%endif
 
 %build
 %if %{with python2}
-echo "############ Python2 dir: %{py2dir}"
 %{py2_build}
 %endif # with python2
 %if %{with python3}
-echo "############ Python3 dir: %{py3dir}"
-#pushd %{py3dir}
 %{py3_build}
-#popd
 %endif
 
 %install
@@ -90,9 +71,7 @@ echo "############ Python3 dir: %{py3dir}"
 %{py2_install}
 %endif # with python2
 %if %{with python3}
-pushd %{py3dir}
 %{py3_install}
-popd
 %endif
 
 %if %{with python2}
