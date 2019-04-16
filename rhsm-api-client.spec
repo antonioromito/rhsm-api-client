@@ -15,7 +15,7 @@ BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 
-%if (0%{?rhel} && 0%{?rhel} = 7)
+%if (0%{?rhel} && 0%{?rhel} <= 7)
 BuildRequires:	python34-devel
 BuildRequires:  python34-setuptools
 %endif
