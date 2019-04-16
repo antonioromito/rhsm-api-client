@@ -22,11 +22,11 @@ Summary:        Red Hat Subscription Manager (RHSM) APIs client interface to col
 License:        GPLv2+
 
 Url:            https://github.com/antonioromito/rhsm-api-client
-Source0:        %{name}-%{version}.tar.gz
+Source0:        %{upname}-%{version}.tar.gz
 
 Group:          Applications/System
 BuildArch:      noarch
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
+BuildRoot:      %{_tmppath}/%{upname}-%{version}-%{release}-buildroot
 
 %description
 Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
