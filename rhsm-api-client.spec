@@ -9,8 +9,9 @@
 # Disable python 2 build by default
 %global         with_python3    1
 %global         with_python2    0
-%else
-%global         with_python3    0
+%endif
+%if 0%{?fedora} <= 29
+%global         with_python3    1
 %global         with_python2    1
 %endif
 
