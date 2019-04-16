@@ -44,7 +44,8 @@ Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from
 Summary:        Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
 %description -n python2-%{upname}
 Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
-Requires:	    python
+BuildRequires:  python2-devel
+BuildRequires:  python2-setuptools
 Requires:       python2-oauthlib
 Requires:       python2-requests-oauthlib
 Requires:       python2-six
@@ -55,7 +56,8 @@ Requires:       python2-six
 Summary:        Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
 %description -n python3-%{upname}
 Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
-Requires:	    python3
+BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
 Requires:       python3-oauthlib
 Requires:       python3-requests-oauthlib
 Requires:       python3-six
