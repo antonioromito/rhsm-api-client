@@ -27,11 +27,6 @@ Group:          Applications/System
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
-
-%if 0%{?fedora} || (0%{?rhel} && 0%{?rhel} > 7)
-
-%endif
-
 %description
 Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
 
@@ -67,21 +62,25 @@ Requires:       python3-six
 %prep
 %autosetup
 #%setup -qn      %{name}-%{version}
-%if %{with python2}
-mkdir build-py2
-%endif # with python2
-%if %{with python3}
-mkdir build-py3
+
+%if 0%{?with_python2}
+rm -rf %{py2dir}
+cp -a . %{py2dir}
+%endif # with_python2
+
+%if 0%{?with_python3}
+rm -rf %{py3dir}
+cp -a . %{py3dir}
 %endif
 
 %build
 %if %{with python2}
-pushd build-py2
+pushd %{py2dir}
 %{py2_build}
 popd
 %endif # with python2
 %if %{with python3}
-pushd build-py3
+pushd %{py3dir}
 %{py3_build}
 popd
 %endif
