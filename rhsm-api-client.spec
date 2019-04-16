@@ -62,11 +62,6 @@ Requires:       python3-six
 %prep
 %autosetup
 #%setup -qn      %{upname}-%{version}
-
-%if 0%{?with_python2}
-rm -rf %{py2dir}
-cp -a . %{py2dir}
-%endif # with_python2
 %if 0%{?with_python3}
 rm -rf %{py3dir}
 cp -a . %{py3dir}
