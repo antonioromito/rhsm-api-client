@@ -91,7 +91,7 @@ pushd build-py2
 popd
 %endif # with python2
 %if %{with python3}
-pushd build-py2
+pushd build-py3
 %{py3_install}
 popd
 %endif
