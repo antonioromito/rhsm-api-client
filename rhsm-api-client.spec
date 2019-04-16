@@ -72,7 +72,7 @@ Requires:       python3-six
 
 
 %if %{with python2}
-%files -n python2-%{upname}
+%files
 %{_bindir}/%{upname}
 %{python2_sitelib}/rhsm
 %{python2_sitelib}/rhsm_api_client-%{version}-py%{python2_version}.egg-info
@@ -81,7 +81,7 @@ Requires:       python3-six
 %endif # with python2
 
 %if %{with python3}
-%files -n python3-%{upname}
+%files
 %{_bindir}/%{upname}
 %{python3_sitelib}/rhsm
 %{python3_sitelib}/rhsm_api_client-%{version}-py%{python3_version}.egg-info
