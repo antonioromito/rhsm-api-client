@@ -1,10 +1,11 @@
 %global         srcname          rhsm-api-client
 %global         sum              Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
 
-if 0%{?fedora} || (0%{?rhel} && 0%{?rhel} > 7)
+%if 0%{?rhel} > 7 || 0%{?fedora} > 29
 %global		    with_python3    1
 %global		    with_python2    0
-%else
+%endif
+%if 0%{?rhel} && 0%{?rhel} <= 7
 %global		    with_python3    0
 %global		    with_python2    1
 %endif
