@@ -16,24 +16,8 @@ BuildRoot:      %{_tmppath}/%{srcname}-%{version}-%{release}-buildroot
 BuildRequires:  python2-devel
 BuildRequires:  python%{python3_pkgversion}-devel
 
-%if 0%{?with_python3_other}
-BuildRequires:  python%{python3_other_pkgversion}-devel
-%endif
-
-
-#%if 0%{?rhel} > 7 || 0%{?fedora} >= 29
-#BuildRequires:  python3-devel
-#BuildRequires:  python3-setuptools
-#BuildRequires:  python3-rpm-macros
-#%global with_python3    1
-#%global with_python2    0
-#%endif
-#%if 0%{?rhel} <= 7 || 0%{?fedora} < 29
-#BuildRequires:  python2-devel
-#BuildRequires:  python2-setuptools
-#BuildRequires:  python2-rpm-macros
-#%global with_python3    0
-#%global with_python2    1
+#%if 0%{?with_python3_other}
+#BuildRequires:  python%{python3_other_pkgversion}-devel
 #%endif
 
 %description
@@ -59,17 +43,17 @@ Requires:       python%{python3_pkgversion}-six
 %description -n python%{python3_pkgversion}-%{srcname}
 Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
 
-%if 0%{?with_python3_other}
-%package -n python%{python3_other_pkgversion}-%{srcname}
-Summary:        %{sum}
-Requires:       python%{python3_other_pkgversion}-oauthlib
-Requires:       python%{python3_other_pkgversion}-requests-oauthlib
-Requires:       python%{python3_other_pkgversion}-six
-%{?python_provide:%python_provide python%{python3_other_pkgversion}-%{srcname}}
-
-%description -n python%{python3_other_pkgversion}-%{srcname}
-Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
-%endif
+#%if 0%{?with_python3_other}
+#%package -n python%{python3_other_pkgversion}-%{srcname}
+#Summary:        %{sum}
+#Requires:       python%{python3_other_pkgversion}-oauthlib
+#Requires:       python%{python3_other_pkgversion}-requests-oauthlib
+#Requires:       python%{python3_other_pkgversion}-six
+#%{?python_provide:%python_provide python%{python3_other_pkgversion}-%{srcname}}
+#
+#%description -n python%{python3_other_pkgversion}-%{srcname}
+#Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
+#%endif
 
 %prep
 %autosetup
@@ -77,10 +61,10 @@ Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from
 %build
 %py2_build
 %py3_build
-%py3_other_build
+#%py3_other_build
 
 %install
-%py3_other_install
+#%py3_other_install
 %py3_install
 %py2_install
 
@@ -102,16 +86,16 @@ Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from
 %doc AUTHORS README.md
 %license LICENSE
 
-%if 0%{?with_python3_other}
-%files -n python%{python3_other_pkgversion}-%{srcname}
-%{_bindir}/%{srcname}
-%{_bindir}/%{srcname}-%{python3_other_version}
-%{python3_other_sitelib}/*
-%{python3_sitelib}/rhsm
-%{python3_sitelib}/rhsm_api_client-%{version}-py%{python3_version}.egg-info
-%doc AUTHORS README.md
-%license LICENSE
-%endif
+#%if 0%{?with_python3_other}
+#%files -n python%{python3_other_pkgversion}-%{srcname}
+#%{_bindir}/%{srcname}
+#%{_bindir}/%{srcname}-%{python3_other_version}
+#%{python3_other_sitelib}/*
+#%{python3_sitelib}/rhsm
+#%{python3_sitelib}/rhsm_api_client-%{version}-py%{python3_version}.egg-info
+#%doc AUTHORS README.md
+#%license LICENSE
+#%endif
 
 %changelog
 * Mon Apr 15 2019 Antonio Romito <aromito@redhat.com> - 1.0-1
