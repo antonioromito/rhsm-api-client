@@ -18,10 +18,10 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 %if (0%{?rhel} && 0%{?rhel} <= 7)
 BuildRequires:	python36-devel
 BuildRequires:  python36-setuptools
-Requires:	    python36
-Requires:       python36-oauthlib
-Requires:       python36-requests-oauthlib
-Requires:       python36-six
+Requires:	    python3
+Requires:       python3-oauthlib
+Requires:       python3-requests-oauthlib
+Requires:       python3-six
 %endif
 
 %if 0%{?fedora}
