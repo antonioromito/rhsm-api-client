@@ -27,6 +27,7 @@ Source0:        %{name}-%{version}.tar.gz
 Group:          Applications/System
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{upname}-%{version}-%{release}-buildroot
+BuildRequires:  python-devel
 
 %description
 Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
