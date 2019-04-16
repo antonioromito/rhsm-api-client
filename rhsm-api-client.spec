@@ -69,11 +69,11 @@ Requires:       python3-six
 
 %build
 %if %{with python2}
-echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>> "%{py2dir}"
+echo "############ Python2 dir: %{py2dir}"
 %{py2_build}
 %endif # with python2
 %if %{with python3}
-echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>> "%{py3dir}"
+echo "############ Python3 dir: %{py3dir}"
 #pushd %{py3dir}
 %{py3_build}
 #popd
