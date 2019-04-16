@@ -9,8 +9,6 @@
 %global		    with_python2    1
 %endif
 
-
-
 Name:           python-%{srcname}
 Version:        1.0
 Release:        1%{?dist}
@@ -64,7 +62,6 @@ Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from
 %endif
 
 %install
-cp -a %{buildroot}%{_bindir}/%{srcname} %{buildroot}%{_bindir}/%{srcname}-%{python3_version}
 %if 0%{?with_python3}
 %py3_install
 %endif
