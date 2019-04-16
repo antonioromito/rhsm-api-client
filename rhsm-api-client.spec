@@ -20,7 +20,7 @@ Release:        1%{?dist}
 License:        GPLv2+
 
 Url:            https://github.com/antonioromito/rhsm-api-client
-Source0:        %{upname}-%{version}.tar.gz
+Source0:        %{name}-%{version}.tar.gz
 
 Group:          Applications/System
 BuildArch:      noarch
@@ -65,7 +65,7 @@ Requires:       python3-six
 
 
 %prep
-%autosetup
+%setup -qn      %{name}-%{version}
 %if %{with python2}
 mkdir build-py2
 %endif # with python2
