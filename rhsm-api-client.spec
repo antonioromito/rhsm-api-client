@@ -68,9 +68,9 @@ popd
 %{py2_install}
 %endif # with python2
 %if %{with python3}
-pushd %{py3dir}
+#pushd %{py3dir}
 %{py3_install}
-popd
+#popd
 %endif
 
 %if %{with python2}
