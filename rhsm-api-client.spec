@@ -26,30 +26,29 @@ BuildRequires:  python2-setuptools
 %global with_python2    1
 %endif
 
-
 %description
 Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
 
-%if %{with python2}
 %package -n python2-%{upname}
 %{?python_provide:%python_provide python2-%{upname}}
 Summary:        Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
-%description -n python2-%{upname}
-Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
 Requires:       python2-oauthlib
 Requires:       python2-requests-oauthlib
 Requires:       python2-six
-%endif # with python2
+%{?python_provide:%python_provide python2-%{srcname}}
 
-%if 0%{?with_python3}
+%description -n python2-%{upname}
+Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
+
 %package -n python3-%{upname}
 Summary:        Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
-%description -n python3-%{upname}
-Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
 Requires:       python3-oauthlib
 Requires:       python3-requests-oauthlib
 Requires:       python3-six
-%endif
+%{?python_provide:%python_provide python3-%{srcname}}
+
+%description -n python3-%{upname}
+Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
 
 %prep
 %autosetup
@@ -74,9 +73,8 @@ pushd %{py3dir}
 popd
 %endif
 
-
 %if %{with python2}
-%files
+%files -n python2-%{upname}
 %{_bindir}/%{upname}
 %{python2_sitelib}/rhsm
 %{python2_sitelib}/rhsm_api_client-%{version}-py%{python2_version}.egg-info
