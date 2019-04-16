@@ -15,7 +15,7 @@
 %global         with_python2    1
 %endif
 
-Name:           %{upname}
+Name:           python-%{upname}
 Version:        1.0
 Release:        1%{?dist}
 Summary:        Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
@@ -32,10 +32,10 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
 
 %if %{with python2}
-%package -n python2-%{name}
-%{?python_provide:%python_provide python2-%{name}}
+%package -n python2-%{upname}
+%{?python_provide:%python_provide python2-%{upname}}
 Summary:        Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
-%description -n python2-%{name}
+%description -n python2-%{upname}
 Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
 BuildRequires:	python2-devel
 BuildRequires:  python2-setuptools
@@ -46,9 +46,9 @@ Requires:       python2-six
 %endif # with python2
 
 %if 0%{?with_python3}
-%package -n     python3-%{name}
+%package -n     python3-%{upname}
 Summary:        Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
-%description -n python3-%{name}
+%description -n python3-%{upname}
 Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
 BuildRequires:	python3-devel
 BuildRequires:  python3-setuptools
@@ -61,7 +61,7 @@ Requires:       python3-six
 
 %prep
 %autosetup
-#%setup -qn      %{name}-%{version}
+#%setup -qn      %{upname}-%{version}
 
 %if 0%{?with_python2}
 rm -rf %{py2dir}
@@ -97,8 +97,8 @@ popd
 %endif
 
 %if %{with python2}
-%files -n python2-%{name}
-%{_bindir}/%{name}
+%files -n python2-%{upname}
+%{_bindir}/%{upname}
 %{python2_sitelib}/rhsm
 %{python2_sitelib}/rhsm_api_client-%{version}-py%{python2_version}.egg-info
 %doc AUTHORS README.md
@@ -106,8 +106,8 @@ popd
 %endif # with python2
 
 %if %{with python3}
-%files -n python3-%{name}
-%{_bindir}/%{name}
+%files -n python3-%{upname}
+%{_bindir}/%{upname}
 %{python3_sitelib}/rhsm
 %{python3_sitelib}/rhsm_api_client-%{version}-py%{python3_version}.egg-info
 %doc AUTHORS README.md
