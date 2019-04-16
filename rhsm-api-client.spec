@@ -58,8 +58,14 @@ Requires:       python3-six
 %endif
 
 %prep
-%autosetup
-#%setup -qn      %{upname}-%{version}
+#%autosetup
+%setup -qn      %{upname}-%{version}
+
+%if 0%{?with_python3}
+rm -rf %{py3dir}
+cp -a . %{py3dir}
+find %{py3dir} -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python3}|'
+%endif
 
 %build
 %if %{with python2}
