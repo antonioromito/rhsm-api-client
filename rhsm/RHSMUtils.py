@@ -22,7 +22,6 @@ class CSVReport(object):
 
     def write_header(self, keys):
         header_keys = keys
-        print(type(header_keys))
         if six.PY3:
             with open(self.filename, 'w', newline='') as csv_file:
                 csv_writer = csv.writer(csv_file, delimiter=',')
@@ -34,7 +33,6 @@ class CSVReport(object):
 
     def add_row(self, keys):
         row_keys = keys
-        print(type(row_keys))
         if six.PY3:
             with open(self.filename, 'a', newline='') as csv_file:
                 csv_writer = csv.writer(csv_file, delimiter=',')
