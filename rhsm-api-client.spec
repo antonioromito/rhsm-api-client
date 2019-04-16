@@ -58,23 +58,23 @@ Requires:       python3-six
 %endif
 
 %prep
-#%autosetup
-%setup -qn      %{name}-%{version}
+%autosetup
+#%setup -qn      %{name}-%{version}
 
-%if 0%{?with_python3}
-rm -rf %{py3dir}
-cp -a . %{py3dir}
-find %{py3dir} -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python3}|'
-%endif
+#%if 0%{?with_python3}
+#rm -rf %{py3dir}
+#cp -a . %{py3dir}
+#find %{py3dir} -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python3}|'
+#%endif
 
 %build
 %if %{with python2}
 %{py2_build}
 %endif # with python2
 %if %{with python3}
-pushd %{py3dir}
+#pushd %{py3dir}
 %{py3_build}
-popd
+#popd
 %endif
 
 %install
