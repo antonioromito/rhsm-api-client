@@ -22,7 +22,7 @@ Summary:        Red Hat Subscription Manager (RHSM) APIs client interface to col
 License:        GPLv2+
 
 Url:            https://github.com/antonioromito/rhsm-api-client
-Source0:        %{upname}-%{version}.tar.gz
+Source0:        %{name}-%{version}.tar.gz
 
 Group:          Applications/System
 BuildArch:      noarch
@@ -57,7 +57,6 @@ Requires:       python3-oauthlib
 Requires:       python3-requests-oauthlib
 Requires:       python3-six
 %endif
-
 
 %prep
 %autosetup
