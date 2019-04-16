@@ -42,7 +42,6 @@ Requires:	    python
 Requires:       python2-oauthlib
 Requires:       python2-requests-oauthlib
 Requires:       python2-six
-
 %endif # with python2
 
 %if 0%{?with_python3}
@@ -60,8 +59,8 @@ Requires:       python3-six
 
 
 %prep
-#%autosetup
-%setup -qn      %{name}-%{version}
+%autosetup
+#%setup -qn      %{name}-%{version}
 
 %if 0%{?with_python2}
 rm -rf %{py2dir}
