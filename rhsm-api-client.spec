@@ -15,8 +15,15 @@ BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 
+%if (0%{?rhel} && 0%{?rhel} = 7)
+BuildRequires:	python34-devel
+BuildRequires:  python34-setuptools
+%endif
+%if 0%{?fedora}
 BuildRequires:	python3-devel
 BuildRequires:  python3-setuptools
+%endif
+
 Requires:	    python3
 Requires:       python3-oauthlib
 Requires:       python3-requests-oauthlib
