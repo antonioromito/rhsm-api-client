@@ -1,7 +1,7 @@
 %global         upname          rhsm-api-client
 
 
-Name:           python2-%{upname}
+Name:           python3-%{upname}
 Version:        1.0
 Release:        1%{?dist}
 Summary:        Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
@@ -15,12 +15,12 @@ BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 
-BuildRequires:	python2-devel
-BuildRequires:  python2-setuptools
-Requires:	    python
-Requires:       python2-oauthlib
-Requires:       python2-requests-oauthlib
-Requires:       python2-six
+BuildRequires:	python3-devel
+BuildRequires:  python3-setuptools
+Requires:	    python3
+Requires:       python3-oauthlib
+Requires:       python3-requests-oauthlib
+Requires:       python3-six
 
 %description
 Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
@@ -29,15 +29,15 @@ Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from
 %setup -qn      %{upname}-%{version}
 
 %build
-%{py2_build}
+%{py3_build}
 
 %install
-%{py2_install}
+%{py3_install}
 
-%files -n python2-%{upname}
+%files -n python3-%{upname}
 %{_bindir}/%{upname}
-%{python2_sitelib}/rhsm
-%{python2_sitelib}/rhsm_api_client-%{version}-py%{python2_version}.egg-info
+%{python3_sitelib}/rhsm
+%{python3_sitelib}/rhsm_api_client-%{version}-py%{python2_version}.egg-info
 %doc AUTHORS README.md
 %license LICENSE
 
