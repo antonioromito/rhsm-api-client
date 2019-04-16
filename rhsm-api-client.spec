@@ -17,6 +17,7 @@
 Name:           %{upname}
 Version:        1.0
 Release:        1%{?dist}
+Summary:        Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
 License:        GPLv2+
 
 Url:            https://github.com/antonioromito/rhsm-api-client
@@ -65,7 +66,8 @@ Requires:       python3-six
 
 
 %prep
-%setup -qn      %{name}-%{version}
+%autosetup
+#%setup -qn      %{name}-%{version}
 %if %{with python2}
 mkdir build-py2
 %endif # with python2
