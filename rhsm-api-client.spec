@@ -59,7 +59,7 @@ Requires:       python3-six
 
 %prep
 #%autosetup
-%setup -qn      %{upname}-%{version}
+%setup -qn      %{name}-%{version}
 
 %if 0%{?with_python3}
 rm -rf %{py3dir}
