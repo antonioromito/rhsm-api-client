@@ -59,7 +59,9 @@ Requires:       python3-six
 %{py2_build}
 %endif # with python2
 %if %{with python3}
+pushd %{py3dir}
 %{py3_build}
+popd
 %endif
 
 %install
@@ -67,7 +69,9 @@ Requires:       python3-six
 %{py2_install}
 %endif # with python2
 %if %{with python3}
+pushd %{py3dir}
 %{py3_install}
+popd
 %endif
 
 
