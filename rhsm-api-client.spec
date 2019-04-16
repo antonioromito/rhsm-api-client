@@ -81,7 +81,7 @@ Requires:       python3-six
 %endif # with python2
 
 %if %{with python3}
-%files
+%files -n python3-%{upname}
 %{_bindir}/%{upname}
 %{python3_sitelib}/rhsm
 %{python3_sitelib}/rhsm_api_client-%{version}-py%{python3_version}.egg-info
