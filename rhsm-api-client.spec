@@ -91,7 +91,7 @@ Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from
 #%{python2_sitelib}/rhsm_api_client-%{version}-py%{python2_version}.egg-info
 %doc AUTHORS README.md
 %license LICENSE
-%endif # with python2
+
 
 %files -n python%{python3_pkgversion}-%{srcname}
 %{_bindir}/%{srcname}
@@ -111,6 +111,7 @@ Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from
 %{python3_sitelib}/rhsm_api_client-%{version}-py%{python3_version}.egg-info
 %doc AUTHORS README.md
 %license LICENSE
+%endif
 
 %changelog
 * Mon Apr 15 2019 Antonio Romito <aromito@redhat.com> - 1.0-1
