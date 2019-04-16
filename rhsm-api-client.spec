@@ -22,6 +22,7 @@ BuildRequires:  python3-setuptools
 %if 0%{?rhel} <= 7 || 0%{?fedora} < 29
 BuildRequires:  python2-devel
 BuildRequires:  python2-setuptools
+BuildRequires:  python2-rpm-macros
 %global with_python3    0
 %global with_python2    1
 %endif
@@ -45,7 +46,7 @@ Summary:        Red Hat Subscription Manager (RHSM) APIs client interface to col
 Requires:       python3-oauthlib
 Requires:       python3-requests-oauthlib
 Requires:       python3-six
-#%{?python_provide:%python_provide python3-%{srcname}}
+%{?python_provide:%python_provide python3-%{srcname}}
 
 %description -n python3-%{upname}
 Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
