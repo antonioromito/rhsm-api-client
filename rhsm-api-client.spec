@@ -1,4 +1,3 @@
-%{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 %global         srcname          rhsm-api-client
 %global         sum              Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
 
@@ -37,7 +36,7 @@ Summary:        %{sum}
 Requires:       python2-oauthlib
 Requires:       python2-requests-oauthlib
 BuildRequires:  python-six
-%{?python_provide:%python_provide python-%{srcname}}
+%{?python_provide:%python_provide python2-%{srcname}}
 
 %description -n python2-%{srcname}
 Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
@@ -84,7 +83,7 @@ export PYTHONPATH=%{buildroot}%{python3_sitelib}
 
 %if 0%{?with_python2}
 %files -n python2-%{srcname}
-%{_bindir}/%{srcname}
+%{_bindir}/rhsm-cli
 %{python2_sitelib}/rhsm
 %{python2_sitelib}/rhsm_api_client-%{version}-py%{python2_version}.egg-info
 %doc AUTHORS README.md
@@ -93,7 +92,7 @@ export PYTHONPATH=%{buildroot}%{python3_sitelib}
 
 %if 0%{?with_python3}
 %files -n python%{python3_pkgversion}-%{srcname}
-%{_bindir}/%{srcname}
+%{_bindir}/rhsm-cli
 %{python3_sitelib}/rhsm
 %{python3_sitelib}/rhsm_api_client-%{version}-py%{python3_version}.egg-info
 %doc AUTHORS README.md
