@@ -52,7 +52,7 @@ BuildRequires:       python%{python3_pkgversion}-six
 Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
 
 %prep
-%autosetup
+%setup -q -n %{srcname}-%{version}
 
 %if 0%{?with_python2}
 #rm -rf %{py2dir}
