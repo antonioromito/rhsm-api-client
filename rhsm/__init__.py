@@ -7,3 +7,17 @@
 # version 2 of the GNU General Public License.
 #
 # See the LICENSE file in the source distribution for further information.
+import gettext
+
+__version__ = "1.0"
+
+gettext_dir = "/usr/share/locale"
+gettext_app = "rhsm-api-client"
+
+gettext.bindtextdomain(gettext_app, gettext_dir)
+
+def _default(msg):
+    return gettext.dgettext(gettext_app, msg)
+
+
+_rhsm = _default
