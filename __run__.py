@@ -7,7 +7,7 @@
 # See the LICENSE file in the source distribution for further information.
 
 try:
-    from rhsm.RHSMClient import main
+    from rhsm.client import main
 except KeyboardInterrupt:
     raise SystemExit()
 

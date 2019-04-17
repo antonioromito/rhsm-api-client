@@ -2,7 +2,7 @@
 Client interface that using Red Hat Subscription Manager (RHSM) APIs
 to collect data from your account.
 """
-# RHSMClient.py
+# client.py
 # gather information from RHSM and report it
 
 # Copyright (C) 2019 Antonio Romito (aromito@redhat.com)
@@ -18,9 +18,9 @@ import argparse
 import time
 import sys
 import six
-from rhsm.RHSMService import RHSMAuthorizationCode, RHSMApi
-from rhsm.RHSMObjects import System, Systems
-from rhsm.RHSMUtils import CSVReport
+from rhsm.service import RHSMAuthorizationCode, RHSMApi
+from rhsm.objects import System, Systems
+from rhsm.utils import CSVReport
 
 if six.PY3:
     raw_input = input
