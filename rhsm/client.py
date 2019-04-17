@@ -18,8 +18,6 @@ import argparse
 import time
 import sys
 import six
-from rhsm import _rhsm as _
-from rhsm import __version__
 from rhsm.service import RHSMAuthorizationCode, RHSMApi
 from rhsm.objects import System, Systems
 from rhsm.utils import CSVReport
