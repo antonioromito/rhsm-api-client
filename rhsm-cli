@@ -11,7 +11,7 @@
 
 import sys
 try:
-    from rhsm.client import main
+    from .rhsm.client import main
 except KeyboardInterrupt:
     raise SystemExit()
 
