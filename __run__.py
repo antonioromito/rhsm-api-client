@@ -10,5 +10,3 @@ from rhsm.client import main
 import sys
 
 main()
-
-# vim: set et ts=4 sw=4 :
