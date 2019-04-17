@@ -22,6 +22,7 @@ Source0:        %{name}-%{version}.tar.gz
 Group:          Applications/System
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{srcname}-%{version}-%{release}-buildroot
+BuildRequires:  gettext
 BuildRequires:  python2-devel
 BuildRequires:  python2-setuptools
 BuildRequires:  python%{python3_pkgversion}-devel
@@ -33,9 +34,9 @@ Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from
 
 %package -n python2-%{srcname}
 Summary:        %{sum}
-Requires:       python-six
 Requires:       python2-oauthlib
 Requires:       python2-requests-oauthlib
+BuildRequires:  python-six
 %{?python_provide:%python_provide python-%{srcname}}
 
 %description -n python2-%{srcname}
@@ -45,7 +46,7 @@ Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from
 Summary:        %{sum}
 Requires:       python%{python3_pkgversion}-oauthlib
 Requires:       python%{python3_pkgversion}-requests-oauthlib
-Requires:       python%{python3_pkgversion}-six
+BuildRequires:       python%{python3_pkgversion}-six
 %{?python_provide:%python_provide python%{python3_pkgversion}-%{srcname}}
 
 %description -n python%{python3_pkgversion}-%{srcname}
@@ -68,6 +69,13 @@ Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from
 %endif
 %if 0%{?with_python3}
 %py3_install
+%endif
+
+%if 0%{?rhel} && 0%{?rhel} <= 7
+%post -p /sbin/ldconfig
+%postun -p /sbin/ldconfig
+%else
+%ldconfig_scriptlets
 %endif
 
 %check
