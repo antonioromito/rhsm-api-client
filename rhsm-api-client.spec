@@ -1,3 +1,4 @@
+%{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 %global         srcname          rhsm-api-client
 %global         sum              Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
 
