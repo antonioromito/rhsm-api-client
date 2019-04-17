@@ -71,13 +71,6 @@ Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from
 %py3_install
 %endif
 
-%if 0%{?rhel} && 0%{?rhel} <= 7
-%post -p /sbin/ldconfig
-%postun -p /sbin/ldconfig
-%else
-%ldconfig_scriptlets
-%endif
-
 %check
 %if %{with python2}
 export PYTHONPATH=%{buildroot}%{python2_sitelib}
