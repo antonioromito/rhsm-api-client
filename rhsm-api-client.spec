@@ -24,11 +24,6 @@ Source0:        %{srcname}-%{version}.tar.gz
 Group:          Applications/System
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{srcname}-%{version}-%{release}-buildroot
-BuildRequires:  gettext
-BuildRequires:  python2-devel
-BuildRequires:  python2-setuptools
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-setuptools
 
 
 %description
@@ -36,9 +31,12 @@ Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from
 
 %package -n python2-%{srcname}
 Summary:        %{sum}
+BuildRequires:  gettext
+BuildRequires:  python2-devel
+BuildRequires:  python2-setuptools
+BuildRequires:  python2-six
 Requires:       python2-oauthlib
 Requires:       python2-requests-oauthlib
-BuildRequires:  python-six
 %{?python_provide:%python_provide python2-%{srcname}}
 
 %description -n python2-%{srcname}
@@ -46,9 +44,12 @@ Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from
 
 %package -n python%{python3_pkgversion}-%{srcname}
 Summary:        %{sum}
+BuildRequires:  gettext
+BuildRequires:  python%{python3_pkgversion}-devel
+BuildRequires:  python%{python3_pkgversion}-setuptools
+BuildRequires:  python%{python3_pkgversion}-six
 Requires:       python%{python3_pkgversion}-oauthlib
 Requires:       python%{python3_pkgversion}-requests-oauthlib
-BuildRequires:       python%{python3_pkgversion}-six
 %{?python_provide:%python_provide python%{python3_pkgversion}-%{srcname}}
 
 %description -n python%{python3_pkgversion}-%{srcname}
