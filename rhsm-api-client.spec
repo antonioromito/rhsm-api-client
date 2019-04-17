@@ -1,6 +1,9 @@
 %global         srcname          rhsm-api-client
 %global         sum              Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
 
+%global py2dir %{_builddir}/python2-%{srcname}-%{version}-%{release}
+%global py3dir %{_builddir}/python3-%{srcname}-%{version}-%{release}
+
 %if 0%{?fedora} >= 28 || 0%{?rhel} > 7
 %global		    with_python3    1
 %global		    with_python2    0
@@ -55,8 +58,8 @@ Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from
 %setup -q -n %{srcname}-%{version}
 
 %if 0%{?with_python2}
-rm -rf %{py2dir}
-cp -a . %{py2dir}
+rm -rf %{py3dir}
+cp -a . %{py3dir}
 %endif
 
 %if 0%{?with_python3}
