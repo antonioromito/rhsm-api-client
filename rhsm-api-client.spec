@@ -32,9 +32,9 @@ Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from
 
 %package -n python2-%{srcname}
 Summary:        %{sum}
-Requires:       python-oauthlib
-Requires:       python-requests-oauthlib
 Requires:       python-six
+Requires:       python2-oauthlib
+Requires:       python2-requests-oauthlib
 %{?python_provide:%python_provide python2-%{srcname}}
 
 %description -n python2-%{srcname}
