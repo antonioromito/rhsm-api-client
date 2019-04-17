@@ -56,27 +56,36 @@ Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from
 
 %build
 %if 0%{?with_python2}
+pushd %{py2dir}
 %py2_build
+popd
 %endif
+pushd %{py3dir}
 %if 0%{?with_python3}
 %py3_build
+popd
 %endif
 
 %install
-%if 0%{?with_python2}
-%py2_install
-mv %{buildroot}%{_bindir} %{buildroot}%{_sbindir}
-%endif
 %if 0%{?with_python3}
+pushd %{py3dir}
 %py3_install
 mv %{buildroot}%{_bindir} %{buildroot}%{_sbindir}
+popd
 %endif
+%if 0%{?with_python2}
+pushd %{py2dir}
+%py2_install
+mv %{buildroot}%{_bindir} %{buildroot}%{_sbindir}
+popd
+%endif
+
 
 %if 0%{?with_python2}
 %files -n python2-%{srcname}
 %{_sbindir}/rhsm-cli
-%{python2_sitelib}/rhsm
-%{python2_sitelib}/rhsm_api_client-%{version}-py%{python2_version}.egg-info
+%{python_sitelib}/rhsm
+%{python_sitelib}/rhsm_api_client-%{version}-py%{python2_version}.egg-info
 %doc AUTHORS README.md
 %license LICENSE
 %endif
