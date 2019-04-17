@@ -6,10 +6,9 @@
 #
 # See the LICENSE file in the source distribution for further information.
 
-try:
-    from rhsm.client import main
-except KeyboardInterrupt:
-    raise SystemExit()
+from rhsm.client import main
+import sys
 
-if __name__ == '__main__':
-    main()
+main()
+
+# vim: set et ts=4 sw=4 :
