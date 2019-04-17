@@ -54,6 +54,16 @@ Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from
 %prep
 %autosetup
 
+%if 0%{?with_python2}
+rm -rf %{py2dir}
+cp -a . %{py2dir}
+%endif
+
+%if 0%{?with_python3}
+rm -rf %{py3dir}
+cp -a . %{py3dir}
+%endif
+
 %build
 %if 0%{?with_python2}
 pushd %{py2dir}
