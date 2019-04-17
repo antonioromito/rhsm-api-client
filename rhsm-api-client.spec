@@ -84,9 +84,9 @@ export PYTHONPATH=%{buildroot}%{python3_sitelib}
 %if 0%{?with_python2}
 %files -n python2-%{srcname}
 %{_bindir}/%{srcname}
-%{python2_sitelib}/*
-#%{python2_sitelib}/rhsm
-#%{python2_sitelib}/rhsm_api_client-%{version}-py%{python2_version}.egg-info
+#%{python2_sitelib}/*
+%{python_sitelib}/rhsm
+%{python_sitelib}/rhsm_api_client-%{version}-py%{python2_version}.egg-info
 %doc AUTHORS README.md
 %license LICENSE
 %endif
@@ -94,9 +94,9 @@ export PYTHONPATH=%{buildroot}%{python3_sitelib}
 %if 0%{?with_python3}
 %files -n python%{python3_pkgversion}-%{srcname}
 %{_bindir}/%{srcname}
-%{python3_sitelib}/*
-#%{python3_sitelib}/rhsm
-#%{python3_sitelib}/rhsm_api_client-%{version}-py%{python3_version}.egg-info
+#%{python3_sitelib}/*
+%{python_sitelib}/rhsm
+%{python_sitelib}/rhsm_api_client-%{version}-py%{python3_version}.egg-info
 %doc AUTHORS README.md
 %license LICENSE
 %endif
