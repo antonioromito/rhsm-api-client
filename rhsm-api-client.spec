@@ -16,7 +16,7 @@ Summary:        %{sum}
 License:        GPLv2+
 
 Url:            https://github.com/antonioromito/rhsm-api-client
-Source0:        %{name}-%{version}.tar.gz
+Source0:        %{srcname}-%{version}.tar.gz
 
 Group:          Applications/System
 BuildArch:      noarch
