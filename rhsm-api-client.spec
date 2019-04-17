@@ -64,7 +64,6 @@ Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from
 %install
 %if 0%{?with_python2}
 %py2_install
-rm %{buildroot}%{_bindir}/%{srcname}
 %endif
 %if 0%{?with_python3}
 %py3_install
