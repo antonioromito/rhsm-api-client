@@ -9,6 +9,7 @@
 
 """ rhsm-api-client entry point. """
 
+import sys
 try:
     from rhsm.RHSMClient import main
 except KeyboardInterrupt:
