@@ -27,7 +27,6 @@ from rhsm.utils import CSVReport
 if six.PY3:
     raw_input = input
 
-
 class RHSMClient(object):
 
     """The main rhsm-api-client class"""

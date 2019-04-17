@@ -35,7 +35,7 @@ Summary:        %{sum}
 Requires:       python-six
 Requires:       python2-oauthlib
 Requires:       python2-requests-oauthlib
-%{?python_provide:%python_provide python2-%{srcname}}
+%{?python_provide:%python_provide python-%{srcname}}
 
 %description -n python2-%{srcname}
 Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account.
@@ -61,12 +61,24 @@ Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from
 %py3_build
 %endif
 
+%if 0%{?with_python2}
+%py2_install
+rm %{buildroot}%{_bindir}/%{srcname}
+%endif
 %install
 %if 0%{?with_python3}
 %py3_install
 %endif
-%if 0%{?with_python2}
-%py2_install
+
+%check
+%if %{with python2}
+export PYTHONPATH=%{buildroot}%{python2_sitelib}
+%{__python2} -m unittest discover -v
+%endif
+
+%if %{with python3}
+export PYTHONPATH=%{buildroot}%{python3_sitelib}
+%{__python3} -m unittest discover -v
 %endif
 
 %if 0%{?with_python2}
