@@ -73,8 +73,8 @@ pushd %{py2dir}
 %py2_build
 popd
 %endif
-pushd %{py3dir}
 %if 0%{?with_python3}
+pushd %{py3dir}
 %py3_build
 popd
 %endif
