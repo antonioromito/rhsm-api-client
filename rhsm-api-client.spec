@@ -41,8 +41,10 @@ rm -rf ${RPM_BUILD_ROOT}
 %files
 %defattr(-,root,root,-)
 %{_sbindir}/rhsm-cli
+%{_datadir}/%{name}
 %{python_sitelib}/*
 %doc AUTHORS README.md LICENSE
+%doc /usr/share/doc/rhsm-cli/html
 
 %changelog
 * Mon Apr 15 2019 Antonio Romito <aromito@redhat.com> - 1.0-1
