@@ -7,3 +7,5 @@
 # version 2 of the GNU General Public License.
 #
 # See the LICENSE file in the source distribution for further information.
+
+__version__ = "1.0"

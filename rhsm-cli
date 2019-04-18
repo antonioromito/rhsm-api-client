@@ -9,13 +9,10 @@
 
 """ rhsm-api-client entry point. """
 
-import sys
 try:
     from rhsm.client import main
 except KeyboardInterrupt:
-    raise SystemExit()
+    raise SystemExit
 
 if __name__ == '__main__':
     main()
-
-# vim: set et ts=4 sw=4 :

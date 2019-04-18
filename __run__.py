@@ -7,6 +7,5 @@
 # See the LICENSE file in the source distribution for further information.
 
 from rhsm.client import main
-import sys
 
 main()
