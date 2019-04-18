@@ -29,6 +29,11 @@ DEB_ARCHIVE_DIR = $(DIST_BUILD_DIR)/$(NAME)report-$(VERSION)
 
 SRC_BUILD = $(DIST_BUILD_DIR)/sdist
 
+
+.PHONY: docs
+docs:
+	make -C html
+
 .PHONY: build
 build:
 	for d in $(SUBDIRS); do make -C $$d; [ $$? = 0 ] || exit 1 ; done
@@ -45,7 +50,6 @@ $(NAME)-$(VERSION).tar.gz: clean
 	@mkdir -p $(ARCHIVE_DIR)
 	@tar -cv rhsm-cli rhsm AUTHORS LICENSE README.md rhsm-api-client.spec Makefile | tar -x -C $(ARCHIVE_DIR)
 	@tar Ccvzf $(DIST_BUILD_DIR) $(DIST_BUILD_DIR)/$(NAME)-$(VERSION).tar.gz $(NAME)-$(VERSION) --exclude-vcs
-
 
 clean:
 	@rm -fv *~ .*~ changenew ChangeLog.old $(NAME)-$(VERSION).tar.gz
