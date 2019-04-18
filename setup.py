@@ -2,7 +2,7 @@ from distutils.core import setup
 
 from rhsm import __version__ as VERSION
 
-setup(name='rhsm-api-client',
+setup(name='rhsm',
       version=VERSION,
       description='Red Hat Subscription Manager (RHSM) APIs client interface to collect a data from your RHSM account. ',
       author='Antonio Romito',
@@ -10,5 +10,5 @@ setup(name='rhsm-api-client',
       url='https://github.com/antonioromito/rhsm-api-client',
       license='GPLv2+',
       scripts=['rhsm-cli'],
-      packages=['rhsm'],
+      packages=['rhsm']
 )
