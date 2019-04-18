@@ -32,7 +32,6 @@ SRC_BUILD = $(DIST_BUILD_DIR)/sdist
 
 .PHONY: docs
 docs:
-	make -C html
 
 .PHONY: build
 build:
