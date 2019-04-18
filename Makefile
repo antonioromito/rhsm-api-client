@@ -29,10 +29,6 @@ DEB_ARCHIVE_DIR = $(DIST_BUILD_DIR)/$(NAME)report-$(VERSION)
 
 SRC_BUILD = $(DIST_BUILD_DIR)/sdist
 
-
-.PHONY: docs
-docs:
-
 .PHONY: build
 build:
 	for d in $(SUBDIRS); do make -C $$d; [ $$? = 0 ] || exit 1 ; done
