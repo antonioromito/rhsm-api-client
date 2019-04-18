@@ -84,20 +84,20 @@ popd
 %if 0%{?with_python3}
 pushd %{py3dir}
 %py3_install
-mv %{buildroot}%{_bindir} %{buildroot}%{_sbindir}
+# %{buildroot}%{_bindir} %{buildroot}%{_sbindir}
 popd
 %endif
 %if 0%{?with_python2}
 pushd %{py2dir}
 %py2_install
-mv %{buildroot}%{_bindir} %{buildroot}%{_sbindir}
+#mv %{buildroot}%{_bindir} %{buildroot}%{_sbindir}
 popd
 %endif
 
 
 %if 0%{?with_python2}
 %files -n python2-%{srcname}
-%{_sbindir}/rhsm-cli
+%{_bindir}/rhsm-cli
 %{python_sitelib}/rhsm
 %{python_sitelib}/rhsm_api_client-%{version}-py%{python2_version}.egg-info
 %doc AUTHORS README.md
@@ -106,7 +106,7 @@ popd
 
 %if 0%{?with_python3}
 %files -n python%{python3_pkgversion}-%{srcname}
-%{_sbindir}/rhsm-cli
+%{_bindir}/rhsm-cli
 %{python3_sitelib}/rhsm
 %{python3_sitelib}/rhsm_api_client-%{version}-py%{python3_version}.egg-info
 %doc AUTHORS README.md
