@@ -27,8 +27,9 @@ class RHSMAuthorizationCode(object):
         self.session = OAuth2Session(client=LegacyApplicationClient(client_id=self.client_id))
 
     def fetch_token(self):
-        self.token = self.session.fetch_token(token_url=self.TOKEN_URL, username=self.username, password=self.password,
-                                              client_id=self.client_id, client_secret=self.client_secret)
+        self.token = self.session.fetch_token(
+                token_url=self.TOKEN_URL, username=self.username, password=self.password,
+                client_id=self.client_id, client_secret=self.client_secret)
         return self.token
 
     def refresh_token(self):
@@ -64,7 +65,8 @@ class RHSMApi(object):
                 t1 = time.time()
                 response = requests.get(url, params=params)
                 t2 = time.time()
-            print(time.ctime() + ' - The Round Trip Time (RTT) for %s is %.4fs. Status code is: %s' %
+            print(time.ctime() + (' - The Round Trip Time (RTT) for %s is %.4fs. '
+                                  'Status code is: %s') %
                   (response.url, (t2 - t1), response.status_code))
 
             try:
@@ -74,14 +76,15 @@ class RHSMApi(object):
                 wait = 5
                 retries += 1
                 time.sleep(wait)
-                print(time.ctime() + ' - Response status code code indicate a failed attempt to retrive data. '
-                                     'Waiting %s secs and re-trying... Attempt number [%d]' % (str(wait), retries))
+                print(time.ctime() + ' - Response status code code indicate a failed attempt to '
+                                     'retrive data. Waiting %s secs and re-trying... Attempt '
+                                     'number [%d]' % (str(wait), retries))
 
             if response.status_code == requests.codes.ok:
                 return response.json()
             elif response.status_code != requests.codes.ok and retries == 3:
-                sys.exit(time.ctime() + ' - Exiting after %d failed attempts to retrive data from: %s' % (retries,
-                                                                                                          response.url))
+                sys.exit(time.ctime() + ' - Exiting after %d failed attempts to retrive data from: '
+                                        '%s' % (retries, response.url))
 
     def systems(self, limit, offset):
         payload = {'limit': limit, 'offset': offset}
