@@ -1,0 +1,17 @@
+# Build artifacts
+*__pycache__/
+build/
+
+# Vim temporary files
+*~
+*.swp
+*.swo
+
+# Unit tests and coverage reports
+.tox/
+.coverage
+.cache
+.pytest_cache
+
+# virtualenv
+.venv/
