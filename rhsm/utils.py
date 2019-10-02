@@ -41,4 +41,3 @@ class CSVReport(object):
             with open(self.filename, 'ab') as csv_file:
                 csv_writer = csv.writer(csv_file, delimiter=',')
                 csv_writer.writerow(row_keys)
-

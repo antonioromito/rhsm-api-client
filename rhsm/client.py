@@ -25,6 +25,7 @@ from rhsm.utils import CSVReport
 if six.PY3:
     raw_input = input
 
+
 class RHSMClient(object):
 
     """The main rhsm-api-client class"""
@@ -38,14 +39,14 @@ class RHSMClient(object):
         total_count = 0
         all_systems = list()
 
-        csv_header = ['Name', 'UUID', 'Subscriptions Attached', 'Type', 'Cloud Provider', 'Status', 'Last Check in',
-                      'Security Advisories', 'Bug Fixes', 'Enhancements']
+        csv_header = ['Name', 'UUID', 'Subscriptions Attached', 'Type', 'Cloud Provider', 'Status',
+                      'Last Check in', 'Security Advisories', 'Bug Fixes', 'Enhancements']
         csv_file = CSVReport(self._args.output_csv)
         if csv_file.check_if_exists() is True:
             text = raw_input('CSV output file already exits. Do you want to override it? (y/N)')
             if text == "" or text.lower() == "n":
-                sys.exit(time.ctime() + ' - Please change output filename path if you don\'t want to override existing '
-                                        'file %s.' % csv_file.filename)
+                sys.exit(time.ctime() + ' - Please change output filename path if you don\'t want '
+                                        'to override existing file %s.' % csv_file.filename)
             elif text.lower() == "y":
                 csv_file.write_header(csv_header)
         else:
@@ -73,10 +74,10 @@ class RHSMClient(object):
                     if 'lastCheckin' not in system:
                         system['lastCheckin'] = None
 
-                    this_system = System(system['entitlementCount'], system['entitlementStatus'],
-                                                     system['errataCounts'],
-                                                     system['href'], system['lastCheckin'], system['name'], system['type'],
-                                                     system['uuid'])
+                    this_system = System(
+                            system['entitlementCount'], system['entitlementStatus'],
+                            system['errataCounts'], system['href'], system['lastCheckin'],
+                            system['name'], system['type'], system['uuid'])
 
                     csv_file.add_row(this_system.get_keys())
 
@@ -105,38 +106,41 @@ def add_systems_command_options(subparsers):
 
     systems_parser.add_argument("-o", "--output_csv", help="Output CSV file", required=True)
 
-    systems_parser.add_argument('-l', '--limit', help='The default and max number of result in a response are 100.',
+    systems_parser.add_argument('-l', '--limit', help=('The default and max number of result in a '
+                                                       'response are 100.'),
                                 default=100, required=False, action='store')
 
 
 def add_allocations_command_options(subparsers):
-    allocations_parser = subparsers.add_parser('allocations', help='Generate allocations CSV report.')
+    subparsers.add_parser('allocations', help='Generate allocations CSV report.')
 
 
 def add_subscriptions_command_options(subparsers):
-    subscriptions_parser = subparsers.add_parser('subscriptions', help='Generate subscriptions CSV report.')
+    subparsers.add_parser('subscriptions', help='Generate subscriptions CSV report.')
 
 
 def add_erratas_command_options(subparsers):
-    erratas_parser = subparsers.add_parser('erratas', help='Generate erratas CSV report.')
+    subparsers.add_parser('erratas', help='Generate erratas CSV report.')
 
 
 def add_packages_command_options(subparsers):
-    packages_parser = subparsers.add_parser('packages', help='Generate packages CSV report.')
+    subparsers.add_parser('packages', help='Generate packages CSV report.')
 
 
 def _get_parser():
     parser = argparse.ArgumentParser(description="RHSM API implementation")
     group = parser.add_argument_group('authentication')
-    group.add_argument("-u", "--username", help="Red Hat customer portal username", required=True, action="store")
-    group.add_argument("-p", "--password", help="Red Hat customer portal password", required=True, action="store")
-    group.add_argument("-c", "--client_id", help="Red Hat customer portal API Key Client ID", required=True,
+    group.add_argument("-u", "--username", help="Red Hat customer portal username", required=True,
                        action="store")
-    group.add_argument("-s", "--client_secret", help="Red Hat customer portal API Key Client Secret",
+    group.add_argument("-p", "--password", help="Red Hat customer portal password", required=True,
+                       action="store")
+    group.add_argument("-c", "--client_id", help="Red Hat customer portal API Key Client ID",
                        required=True, action="store")
+    group.add_argument("-s", "--client_secret", help=("Red Hat customer portal API Key Client "
+                       "Secret"), required=True, action="store")
 
-    subparsers = parser.add_subparsers(help='Program mode: systems, allocations, subscriptions, errata, packages)',
-                                       dest='mode')
+    subparsers = parser.add_subparsers(help=('Program mode: systems, allocations, subscriptions, '
+                                       'errata, packages)'), dest='mode')
 
     add_systems_command_options(subparsers)
     add_allocations_command_options(subparsers)
