@@ -110,14 +110,15 @@ optional arguments:
  -h, --help            show this help message and exit
 
 authentication:
-  -u USERNAME, --username USERNAME
-                        Red Hat customer portal username
-  -p PASSWORD, --password PASSWORD
-                        Red Hat customer portal password
-  -c CLIENT_ID, --client_id CLIENT_ID
-                        Red Hat customer portal API Key Client ID
-  -s CLIENT_SECRET, --client_secret CLIENT_SECRET
-                        Red Hat customer portal API Key Client Secret
+-c CLIENT_ID, --client_id CLIENT_ID
+                      Red Hat Customer Portal OIDC client (default: rhsm-
+                      api)
+-i IDP_TOKEN_URL, --idp_token_url IDP_TOKEN_URL
+                      Red Hat Customer Portal SSO Token URL (default:
+                      https://sso.redhat.com/auth/realms/redhat-
+                      external/protocol/openid-connect/token)
+-t TOKEN, --token TOKEN
+                      Red Hat Customer Portal offline token
 ```
 
 ## Examples
@@ -125,7 +126,26 @@ authentication:
 * Generate CSV listing all systems
 
 ```
-$ ./rhsm-api-client.py -u 'MyRHNUsername' -p 'MyRHNPassword' -c 'MyClientID' -s 'MyClientSecret' systems -o /path/to/systems.csv -l 100
+$ ./rhsm-api-client.py -t 'MyOfflineToken' systems -o /path/to/systems.csv -l 100
+```
+
+## Offline Token Storage
+
+Your offline token is a form of credential and should be treated securely. To help prevent
+your token from being exposed in your shell history or via copy/paste, you can store your token
+as an environment variable in your shell profile.
+
+For example, with Bash you can add it to your `~/.bashrc` file and add the following line
+with your token obtained from the Customer Portal:
+
+```bash
+# RHSM API Token
+export RHSM_API_TOKEN=SOME_LONG_TOKEN_HERE
+```
+
+Then when calling your scripts, the token can be recalled via the variable:
+```
+$ ./rhsm-api-client.py -t $RHSM_API_TOKEN systems -o /path/to/systems.csv -l 100
 ```
 
 ## Authors
