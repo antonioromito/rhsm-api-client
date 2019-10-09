@@ -10,31 +10,24 @@
 import requests
 import time
 import sys
-from oauthlib.oauth2 import TokenExpiredError, LegacyApplicationClient
+from oauthlib.oauth2 import TokenExpiredError, Client
 from requests_oauthlib import OAuth2Session
 
 
 class RHSMAuthorizationCode(object):
-    TOKEN_URL = 'https://sso.redhat.com/auth/realms/3scale/protocol/openid-connect/token'
+    TOKEN_PATH = ''
 
-    def __init__(self, username, password, client_id, client_secret, token=None):
-        self.username = username
-        self.password = password
+    def __init__(self, token_url, client_id, offline_token, token=None):
+        self.token_url = token_url
         self.client_id = client_id
-        self.client_secret = client_secret
+        self.offline_token = offline_token
         self.token = token
 
-        self.session = OAuth2Session(client=LegacyApplicationClient(client_id=self.client_id))
-
-    def fetch_token(self):
-        self.token = self.session.fetch_token(
-                token_url=self.TOKEN_URL, username=self.username, password=self.password,
-                client_id=self.client_id, client_secret=self.client_secret)
-        return self.token
+        self.session = OAuth2Session(client=Client(client_id=self.client_id,
+                                                   refresh_token=self.offline_token))
 
     def refresh_token(self):
-        self.token = self.session.refresh_token(token_url=self.TOKEN_URL, client_id=self.client_id,
-                                                client_secret=self.client_secret)
+        self.token = self.session.refresh_token(token_url=self.token_url, client_id=self.client_id)
         return self.token
 
 

@@ -52,9 +52,9 @@ class RHSMClient(object):
         else:
             csv_file.write_header(csv_header)
 
-        authorization = RHSMAuthorizationCode(self._args.username, self._args.password,
-                                              self._args.client_id, self._args.client_secret)
-        authorization.fetch_token()
+        authorization = RHSMAuthorizationCode(self._args.idp_token_url, self._args.client_id,
+                                              self._args.token)
+        authorization.refresh_token()
         api_service = RHSMApi(authorization)
 
         limit = int(self._args.limit)
@@ -130,14 +130,14 @@ def add_packages_command_options(subparsers):
 def _get_parser():
     parser = argparse.ArgumentParser(description="RHSM API implementation")
     group = parser.add_argument_group('authentication')
-    group.add_argument("-u", "--username", help="Red Hat customer portal username", required=True,
-                       action="store")
-    group.add_argument("-p", "--password", help="Red Hat customer portal password", required=True,
-                       action="store")
-    group.add_argument("-c", "--client_id", help="Red Hat customer portal API Key Client ID",
-                       required=True, action="store")
-    group.add_argument("-s", "--client_secret", help=("Red Hat customer portal API Key Client "
-                       "Secret"), required=True, action="store")
+    group.add_argument('-c', '--client_id', help=('Red Hat Customer Portal OIDC client '
+                       "(default: %(default)s)"), action='store', default='rhsm-api')
+    group.add_argument('-i', '--idp_token_url', help=('Red Hat Customer Portal SSO Token URL '
+                       "(default: %(default)s)"), action='store',
+                       default=('https://sso.redhat.com/auth/realms/redhat-external'
+                                '/protocol/openid-connect/token'))
+    group.add_argument('-t', '--token', help='Red Hat Customer Portal offline token',
+                       required=True, action='store')
 
     subparsers = parser.add_subparsers(help=('Program mode: systems, allocations, subscriptions, '
                                        'errata, packages)'), dest='mode')
