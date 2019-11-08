@@ -167,15 +167,14 @@ Then when calling your scripts, the token can be recalled via the variable:
 $ ./rhsm-api-client.py -t $RHSM_API_TOKEN systems -o /path/to/systems.csv -l 100
 ```
 
-## Authors
-
-* **Antonio Romito** - *Initial work* - [rhsm-api-client](https://github.com/antonioromito/rhsm-api-client)
-
 ## License
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the  GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+## Authors
+
+* **Antonio Romito** - *Initial work* - [rhsm-api-client](https://github.com/antonioromito/rhsm-api-client)
 
 ## Contributors ✨
 
