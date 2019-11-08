@@ -1,4 +1,5 @@
 # Red Hat RHSM APIs Python client implementation 
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
 
 This project aim is to create a client interface that using Red Hat Subscription Manager (RHSM) APIs is capable to collect a series of data from your account. 
 
@@ -175,3 +176,19 @@ $ ./rhsm-api-client.py -t $RHSM_API_TOKEN systems -o /path/to/systems.csv -l 100
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the  GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+<table>
+  <tr>
+    <td align="center"><a href="https://patrick.easte.rs"><img src="https://avatars2.githubusercontent.com/u/5381696?v=4" width="100px;" alt="Patrick Easters"/><br /><sub><b>Patrick Easters</b></sub></a><br /><a href="https://github.com/antonioromito/rhsm-api-client/commits?author=patrickeasters" title="Code">💻</a></td>
+  </tr>
+</table>
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
