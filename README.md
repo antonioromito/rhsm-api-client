@@ -1,5 +1,5 @@
 # Red Hat RHSM APIs Python client implementation 
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors)
 
 This project aim is to create a client interface that using Red Hat Subscription Manager (RHSM) APIs is capable to collect a series of data from your account. 
 
@@ -186,6 +186,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tr>
     <td align="center"><a href="https://patrick.easte.rs"><img src="https://avatars2.githubusercontent.com/u/5381696?v=4" width="100px;" alt="Patrick Easters"/><br /><sub><b>Patrick Easters</b></sub></a><br /><a href="https://github.com/antonioromito/rhsm-api-client/commits?author=patrickeasters" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/gnaponie"><img src="https://avatars3.githubusercontent.com/u/35328841?v=4" width="100px;" alt="Giulia Naponiello"/><br /><sub><b>Giulia Naponiello</b></sub></a><br /><a href="https://github.com/antonioromito/rhsm-api-client/commits?author=gnaponie" title="Code">💻</a></td>
   </tr>
 </table>
 
