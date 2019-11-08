@@ -123,7 +123,25 @@ authentication:
 
 ## Examples
 
-* Generate CSV listing all systems
+* Generate CSV report listing all systems
+
+Helper for "systems" CSV function provide specific instructions on the arguments that the cli expects:
+
+```
+$ ./rhsm-cli systems -h
+usage: rhsm-cli systems [-h] -o OUTPUT_CSV [-l LIMIT]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -o OUTPUT_CSV, --output_csv OUTPUT_CSV
+                        Output CSV file
+  -l LIMIT, --limit LIMIT
+                        The default and max number of result in a response are
+                        100.
+
+```
+
+Here below and example of CSV report generation command line arguments usage:
 
 ```
 $ ./rhsm-api-client.py -t 'MyOfflineToken' systems -o /path/to/systems.csv -l 100
