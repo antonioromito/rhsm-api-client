@@ -1,0 +1,23 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "patrickeasters",
+      "name": "Patrick Easters",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/5381696?v=4",
+      "profile": "https://patrick.easte.rs",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "rhsm-api-client",
+  "projectOwner": "antonioromito",
+  "repoType": "github",
+  "repoHost": "https://github.com"
+}
