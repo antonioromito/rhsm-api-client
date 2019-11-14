@@ -90,10 +90,8 @@ This script can be executed from your preferred path
 ## Usage
 
 ```
-usage: rhsm-api-client.py [-h] -u USERNAME -p PASSWORD -c CLIENT_ID -s
-                              CLIENT_SECRET
-                              {systems,allocations,subscriptions,erratas,packages}
-                              ...
+usage: rhsm-cli [-h] [-c CLIENT_ID] [-i IDP_TOKEN_URL] -t TOKEN
+                {systems,allocations,subscriptions,erratas,packages} ...
 
 RHSM API implementation
 
@@ -108,18 +106,19 @@ positional arguments:
     packages            Generate packages CSV report.
 
 optional arguments:
- -h, --help            show this help message and exit
+  -h, --help            show this help message and exit
 
 authentication:
--c CLIENT_ID, --client_id CLIENT_ID
-                      Red Hat Customer Portal OIDC client (default: rhsm-
-                      api)
--i IDP_TOKEN_URL, --idp_token_url IDP_TOKEN_URL
-                      Red Hat Customer Portal SSO Token URL (default:
-                      https://sso.redhat.com/auth/realms/redhat-
-                      external/protocol/openid-connect/token)
--t TOKEN, --token TOKEN
-                      Red Hat Customer Portal offline token
+  -c CLIENT_ID, --client_id CLIENT_ID
+                        Red Hat Customer Portal OIDC client (default: rhsm-
+                        api)
+  -i IDP_TOKEN_URL, --idp_token_url IDP_TOKEN_URL
+                        Red Hat Customer Portal SSO Token URL (default:
+                        https://sso.redhat.com/auth/realms/redhat-
+                        external/protocol/openid-connect/token)
+  -t TOKEN, --token TOKEN
+                        Red Hat Customer Portal offline token
+
 ```
 
 ## Examples
@@ -145,7 +144,7 @@ optional arguments:
 Here below and example of CSV report generation command line arguments usage:
 
 ```
-$ ./rhsm-api-client.py -t 'MyOfflineToken' systems -o /path/to/systems.csv -l 100
+$ ./rhsm-cli -t 'MyOfflineToken' systems -o /path/to/systems.csv -l 100
 ```
 
 ## Offline Token Storage
@@ -164,7 +163,7 @@ export RHSM_API_TOKEN=SOME_LONG_TOKEN_HERE
 
 Then when calling your scripts, the token can be recalled via the variable:
 ```
-$ ./rhsm-api-client.py -t $RHSM_API_TOKEN systems -o /path/to/systems.csv -l 100
+$ ./rhsm-cli -t $RHSM_API_TOKEN systems -o /path/to/systems.csv -l 100
 ```
 
 ## License
