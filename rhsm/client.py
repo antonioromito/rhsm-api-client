@@ -15,12 +15,15 @@ to collect data from your account.
 #
 # See the LICENSE file in the source distribution for further information.
 import argparse
+import logging
 import time
 import sys
 import six
 from rhsm.service import RHSMAuthorizationCode, RHSMApi
 from rhsm.objects import System, Systems
 from rhsm.utils import CSVReport
+
+logging.getLogger(__name__)
 
 if six.PY3:
     raw_input = input
@@ -85,20 +88,20 @@ class RHSMClient(object):
             else:
                 break
 
-        print(time.ctime() + " - Total Number of systems in list: %d" % len(all_systems))
-        print(time.ctime() + " - Total Number of systems from count: %d" % total_count)
+        logging.debug(time.ctime() + " - Total Number of systems in list: %d" % len(all_systems))
+        logging.debug(time.ctime() + " - Total Number of systems from count: %d" % total_count)
 
     def execute_allocations(args):
-        print('To be implemented')
+        raise NotImplementedError
 
     def execute_subscriptions(args):
-        print('To be implemented')
+        raise NotImplementedError
 
     def execute_erratas(args):
-        print('To be implemented')
+        raise NotImplementedError
 
     def execute_packages(args):
-        print('To be implemented')
+        raise NotImplementedError
 
 
 def add_systems_command_options(subparsers):

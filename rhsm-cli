@@ -9,6 +9,13 @@
 
 """ rhsm-api-client entry point. """
 
+import argparse
+import logging
+import os
+
+logging.basicConfig(level=os.getenv('LOGLEVEL', 'WARNING').upper())
+
+
 try:
     from rhsm.client import main
 except KeyboardInterrupt:

@@ -7,12 +7,14 @@
 # version 2 of the GNU General Public License.
 #
 # See the LICENSE file in the source distribution for further information.
+import logging
 import requests
 import time
 import sys
 from oauthlib.oauth2 import TokenExpiredError, Client
 from requests_oauthlib import OAuth2Session
 
+logging.getLogger(__name__)
 
 class RHSMAuthorizationCode(object):
     TOKEN_PATH = ''
@@ -42,14 +44,14 @@ class RHSMApi(object):
         success = False
         while not success and retries < 3:
             url = self.API_URL + '/' + endpoint
-            print(time.ctime() + ' - Starting request: %s with params: %s ' % (url, params))
+            logging.debug(time.ctime() + ' - Starting request: %s with params: %s ' % (url, params))
             if self.auth:
                 try:
                     t1 = time.time()
                     response = self.auth.session.get(url, params=params)
                     t2 = time.time()
                 except TokenExpiredError:
-                    print(time.ctime() + ' - Token has expired. Refreshing token...')
+                    logging.debug(time.ctime() + ' - Token has expired. Refreshing token...')
                     self.auth.refresh_token()
                     t1 = time.time()
                     response = self.auth.session.get(url, params=params)
@@ -58,7 +60,7 @@ class RHSMApi(object):
                 t1 = time.time()
                 response = requests.get(url, params=params)
                 t2 = time.time()
-            print(time.ctime() + (' - The Round Trip Time (RTT) for %s is %.4fs. '
+            logging.debug(time.ctime() + (' - The Round Trip Time (RTT) for %s is %.4fs. '
                                   'Status code is: %s') %
                   (response.url, (t2 - t1), response.status_code))
 
@@ -69,7 +71,7 @@ class RHSMApi(object):
                 wait = 5
                 retries += 1
                 time.sleep(wait)
-                print(time.ctime() + ' - Response status code code indicate a failed attempt to '
+                logging.debug(time.ctime() + ' - Response status code code indicate a failed attempt to '
                                      'retrive data. Waiting %s secs and re-trying... Attempt '
                                      'number [%d]' % (str(wait), retries))
 

@@ -8,6 +8,9 @@
 #
 # See the LICENSE file in the source distribution for further information.
 
+import logging
+
+logging.getLogger(__name__)
 
 class Systems:
     def __init__(self, pagination, body):

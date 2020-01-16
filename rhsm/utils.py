@@ -9,7 +9,10 @@
 # See the LICENSE file in the source distribution for further information.
 import os
 import csv
+import logging
 import six
+
+logging.getLogger(__name__)
 
 
 class CSVReport(object):
