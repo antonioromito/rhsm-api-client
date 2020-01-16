@@ -18,6 +18,7 @@ class System:
         'name': 'Name',
         'uuid': 'UUID',
         'type': 'type',
+        'hostname': 'Hostname',
         'entitlementCount': 'Entitlement Count',
         'entitlementStatus': 'Entitlement Status',
         'lastCheckin': 'Last Check-In',
@@ -27,7 +28,7 @@ class System:
     }
 
     def __init__(self, entitlement_count, entitlement_status, errata_counts, href, last_checkin,
-                 name, stype, uuid):
+                 name, stype, uuid, hostname):
         self.entitlementCount = entitlement_count
         self.entitlementStatus = entitlement_status
         self.errataCounts = errata_counts
@@ -36,6 +37,7 @@ class System:
         self.name = name
         self.type = stype
         self.uuid = uuid
+        self.hostname = hostname
 
         self.securityCount = None
         self.bugfixCount = None
@@ -78,7 +80,7 @@ class System:
 
         system = System(data['entitlementCount'], data['entitlementStatus'],
                         data['errataCounts'], data['href'], data['lastCheckin'],
-                        data['name'], data['type'], data['uuid'])
+                        data['name'], data['type'], data['uuid']. data['hostname'])
 
         return system
 
