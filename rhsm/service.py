@@ -14,6 +14,9 @@ import time
 import sys
 from oauthlib.oauth2 import TokenExpiredError, Client
 from requests_oauthlib import OAuth2Session
+from rhsm.objects.allocation import Allocation
+from rhsm.objects.errata import Errata
+from rhsm.objects.subscription import Subscription
 from rhsm.objects.system import System
 
 logging.getLogger(__name__)
@@ -84,26 +87,63 @@ class RHSMApi(object):
                 sys.exit(time.ctime() + ' - Exiting after %d failed attempts to retrive data from: '
                                         '%s' % (retries, response.url))
 
-    def systems(self):
-        logging.debug('Started systems service call')
-        all_systems = []
+    def batch_fetch(self, fetch_func, deserialize_func):
+        batch_set = []
         offset = 0
         while True:
-            batch_systems = self.fetch_systems(offset)
-            batch_count = batch_systems['pagination']['count']
+            batch = fetch_func(offset)
+            batch_count = batch['pagination']['count']
             if not batch_count:
                 break
 
-            logging.debug('Fetched another %s systems', batch_count)
+            logging.debug('Fetched %s more entries', batch_count)
             offset += self.FETCH_LIMIT
-            for system_raw in batch_systems['body']:
-                logging.debug('Processing: %s', system_raw)
-                system = System.deserialize(system_raw)
-                all_systems.append(system)
-        return all_systems
+            for raw in batch['body']:
+                logging.debug('Processing: %s', raw)
+                obj = deserialize_func(raw)
+                batch_set.append(obj)
+        return batch_set
 
+    def systems(self):
+        fetch_func = self.fetch_systems
+        deserialize_func = System.deserialize
+        batch = self.batch_fetch(fetch_func, deserialize_func)
+        return batch
 
     def fetch_systems(self, offset):
         payload = {'limit': self.FETCH_LIMIT, 'offset': offset}
         data = self._get("systems", params=payload)
+        return data
+
+    def allocations(self):
+        fetch_func = self.fetch_allocations
+        deserialize_func = Allocation.deserialize
+        batch = self.batch_fetch(fetch_func, deserialize_func)
+        return batch
+
+    def fetch_allocations(self, offset):
+        payload = {'limit': self.FETCH_LIMIT, 'offset': offset}
+        data = self._get("allocations", params=payload)
+        return data
+
+    def errata(self):
+        fetch_func = self.fetch_errata
+        deserialize_func = Errata.deserialize
+        batch = self.batch_fetch(fetch_func, deserialize_func)
+        return batch
+
+    def fetch_errata(self, offset):
+        payload = {'limit': self.FETCH_LIMIT, 'offset': offset}
+        data = self._get("errata", params=payload)
+        return data
+
+    def subscriptions(self):
+        fetch_func = self.fetch_subscription
+        deserialize_func = Subscription.deserialize
+        batch = self.batch_fetch(fetch_func, deserialize_func)
+        return batch
+
+    def fetch_subscription(self, offset):
+        payload = {'limit': self.FETCH_LIMIT, 'offset': offset}
+        data = self._get("subscriptions", params=payload)
         return data

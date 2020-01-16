@@ -38,30 +38,39 @@ class RHSMClient(object):
         self._args = self._parser.parse_args()
         self.mode = self._args.mode
 
-    def execute_systems(self):
-
+    def get_service(self):
         authorization = RHSMAuthorizationCode(self._args.idp_token_url, self._args.client_id,
                                               self._args.token)
         authorization.refresh_token()
         api_service = RHSMApi(authorization)
-        all_systems = api_service.systems()
+        return api_service
 
-        logging.debug(time.ctime() + " - Total Number of systems in list: %d" % len(all_systems))
-
+    def output(self, batch):
         format = OutputFormat[self._args.format.upper()]
-        outputter = Outputter(format, all_systems)
+        outputter = Outputter(format, batch)
         outputter.write()
 
-    def execute_allocations(args):
-        raise NotImplementedError
+    def execute_systems(self):
+        service = self.get_service()
+        all_systems = api_service.systems()
+        self.output(all_systems)
 
-    def execute_subscriptions(args):
-        raise NotImplementedError
+    def execute_allocations(self):
+        service = self.get_service()
+        all_allocations = service.allocations()
+        self.output(all_allocations)
 
-    def execute_erratas(args):
-        raise NotImplementedError
+    def execute_subscriptions(self):
+        service = self.get_service()
+        all_subscriptions = service.subscriptions()
+        self.output(all_subscriptions)
 
-    def execute_packages(args):
+    def execute_errata(self):
+        service = self.get_service()
+        all_errata = service.errata()
+        self.output(all_errata)
+
+    def execute_packages(self):
         raise NotImplementedError
 
 
@@ -81,8 +90,8 @@ def add_subscriptions_command_options(subparsers):
     subparsers.add_parser('subscriptions', help='Generate subscriptions CSV report.')
 
 
-def add_erratas_command_options(subparsers):
-    subparsers.add_parser('erratas', help='Generate erratas CSV report.')
+def add_errata_command_options(subparsers):
+    subparsers.add_parser('errata', help='Generate errata CSV report.')
 
 
 def add_packages_command_options(subparsers):
@@ -109,7 +118,7 @@ def _get_parser():
     add_systems_command_options(subparsers)
     add_allocations_command_options(subparsers)
     add_subscriptions_command_options(subparsers)
-    add_erratas_command_options(subparsers)
+    add_errata_command_options(subparsers)
     add_packages_command_options(subparsers)
 
     return parser
@@ -125,7 +134,7 @@ def main():
         rhsm.execute_allocations()
     elif rhsm.mode == "subscriptions":
         rhsm.execute_subscriptions()
-    elif rhsm.mode == "erratas":
-        rhsm.execute_erratas()
+    elif rhsm.mode == "errata":
+        rhsm.execute_errata()
     elif rhsm.mode == "packages":
         rhsm.execute_packages()
