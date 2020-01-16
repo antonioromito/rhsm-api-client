@@ -14,6 +14,14 @@ logging.getLogger(__name__)
 
 
 class Errata:
+    csv_columns = {
+        'advisoryId': 'Advisory ID',
+        'type': 'Type',
+        'publishDate': 'Publish Date',
+        'affectedSystemCount': 'Affected Systems',
+        'synopsis': 'Synopsis',
+    }
+
     def __init__(self, advisory_id, affected_system_count, details, publish_date,
                  synopsis, systems, _type):
         self.advisoryId = advisory_id

@@ -14,6 +14,15 @@ logging.getLogger(__name__)
 
 
 class Allocation:
+    csv_columns = {
+        'name': 'Name',
+        'type': 'Type',
+        'entitlementCount': 'Entitlement Count',
+        'uuid': 'UUID',
+        'version': 'Version',
+        'url': 'URL',
+    }
+
     def __init__(self, entitlement_count, name, _type, url, uuid, version):
         self.entitlementCount = entitlement_count
         self.name = name

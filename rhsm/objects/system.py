@@ -14,6 +14,18 @@ logging.getLogger(__name__)
 
 
 class System:
+    csv_columns = {
+        'name': 'Name',
+        'uuid': 'UUID',
+        'type': 'type',
+        'entitlementCount': 'Entitlement Count',
+        'entitlementStatus': 'Entitlement Status',
+        'lastCheckin': 'Last Check-In',
+        'securityCount': 'Security Advisories',
+        'bugfixCount': 'Bug Fixes',
+        'enhancementCount': 'Enhancements',
+    }
+
     def __init__(self, entitlement_count, entitlement_status, errata_counts, href, last_checkin,
                  name, stype, uuid):
         self.entitlementCount = entitlement_count
@@ -69,3 +81,4 @@ class System:
                         data['name'], data['type'], data['uuid'])
 
         return system
+

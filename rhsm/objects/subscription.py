@@ -15,11 +15,24 @@ logging.getLogger(__name__)
 
 
 class Subscription:
+    csv_columns = {
+        'subscriptionName': 'Name',
+        'subscriptionNumber': 'Subscription Number',
+        'status': 'Status',
+        'quantity': 'Quantity',
+        'sku': 'SKU',
+        'startDate': 'Start Date',
+        'endDate': 'End Date',
+        'poolCount': 'Pool Count',
+        'contractNumber': 'Contract Number',
+    }
+
     def __init__(self, contract_number, end_date, pools, quantity, sku, start_date,
                 status, subscription_name, subscription_number):
         self.contractNumber = contract_number
         self.endDate = end_date
         self.pools = pools
+        self.poolCount = len(self.pools)
         self.quantity = quantity
         self.startDate = start_date
         self.status = status

@@ -52,7 +52,7 @@ class RHSMClient(object):
 
     def execute_systems(self):
         service = self.get_service()
-        all_systems = api_service.systems()
+        all_systems = service.systems()
         self.output(all_systems)
 
     def execute_allocations(self):

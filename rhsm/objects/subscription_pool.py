@@ -14,6 +14,13 @@ logging.getLogger(__name__)
 
 
 class SubscriptionPool:
+    csv_columns = {
+        'id': 'ID',
+        'type': 'Type',
+        'quantity': 'Quantity',
+        'consumed': 'Consumed',
+    }
+
     def __init__(self, consumed, _id, quantity, _type):
         self.consumed = consumed
         self.id = _id
