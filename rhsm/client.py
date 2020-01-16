@@ -21,7 +21,7 @@ import sys
 import six
 from rhsm.service import RHSMAuthorizationCode, RHSMApi
 from rhsm.objects import System, Systems
-from rhsm.utils import CSVReport
+from rhsm.outputter import Outputter, OutputFormat, OUTPUT_FORMAT_DEFAULT
 
 logging.getLogger(__name__)
 
@@ -42,27 +42,12 @@ class RHSMClient(object):
         total_count = 0
         all_systems = list()
 
-        csv_header = ['Name', 'UUID', 'Subscriptions Attached', 'Type', 'Cloud Provider', 'Status',
-                      'Last Check in', 'Security Advisories', 'Bug Fixes', 'Enhancements']
-        csv_file = CSVReport(self._args.output_csv)
-        if csv_file.check_if_exists() is True:
-            text = raw_input('CSV output file already exits. Do you want to override it? (y/N)')
-            if text == "" or text.lower() == "n":
-                sys.exit(time.ctime() + ' - Please change output filename path if you don\'t want '
-                                        'to override existing file %s.' % csv_file.filename)
-            elif text.lower() == "y":
-                csv_file.write_header(csv_header)
-        else:
-            csv_file.write_header(csv_header)
-
         authorization = RHSMAuthorizationCode(self._args.idp_token_url, self._args.client_id,
                                               self._args.token)
         authorization.refresh_token()
         api_service = RHSMApi(authorization)
 
         limit = int(self._args.limit)
-        if limit > 100:
-            limit = 100
 
         offset = 0
         while True:
@@ -82,14 +67,16 @@ class RHSMClient(object):
                             system['errataCounts'], system['href'], system['lastCheckin'],
                             system['name'], system['type'], system['uuid'])
 
-                    csv_file.add_row(this_system.get_keys())
-
                     all_systems.append(this_system)
             else:
                 break
 
         logging.debug(time.ctime() + " - Total Number of systems in list: %d" % len(all_systems))
         logging.debug(time.ctime() + " - Total Number of systems from count: %d" % total_count)
+
+        format = OutputFormat[self._args.format.upper()]
+        outputter = Outputter(format, all_systems)
+        outputter.write()
 
     def execute_allocations(args):
         raise NotImplementedError
@@ -105,9 +92,7 @@ class RHSMClient(object):
 
 
 def add_systems_command_options(subparsers):
-    systems_parser = subparsers.add_parser('systems', help='Generate systems CSV report.')
-
-    systems_parser.add_argument("-o", "--output_csv", help="Output CSV file", required=True)
+    systems_parser = subparsers.add_parser('systems', help='Fetch a list of systems.')
 
     systems_parser.add_argument('-l', '--limit', help=('The default and max number of result in a '
                                                        'response are 100.'),
@@ -141,6 +126,8 @@ def _get_parser():
                                 '/protocol/openid-connect/token'))
     group.add_argument('-t', '--token', help='Red Hat Customer Portal offline token',
                        required=True, action='store')
+    group.add_argument('-f', '--format', help='The format to output data as.',
+                       choices=OutputFormat.as_args(), default=OUTPUT_FORMAT_DEFAULT)
 
     subparsers = parser.add_subparsers(help=('Program mode: systems, allocations, subscriptions, '
                                        'errata, packages)'), dest='mode')

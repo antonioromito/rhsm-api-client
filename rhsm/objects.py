@@ -70,3 +70,6 @@ class System:
                 'Enhancements: %d' % (self.name, self.uuid, self.enhancementCount, self.type,
                                       "Not Available", self.entitlementStatus, self.lastCheckin,
                                       self.securityCount, self.bugfixCount, self.enhancementCount))
+
+    def serialize(self):
+        return self.__dict__
