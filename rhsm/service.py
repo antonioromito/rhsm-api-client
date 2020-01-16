@@ -8,11 +8,13 @@
 #
 # See the LICENSE file in the source distribution for further information.
 import logging
+import json
 import requests
 import time
 import sys
 from oauthlib.oauth2 import TokenExpiredError, Client
 from requests_oauthlib import OAuth2Session
+from rhsm.objects.system import System
 
 logging.getLogger(__name__)
 
@@ -35,6 +37,7 @@ class RHSMAuthorizationCode(object):
 
 class RHSMApi(object):
     API_URL = 'https://api.access.redhat.com/management/v1'
+    FETCH_LIMIT = 100
 
     def __init__(self, auth=None):
         self.auth = auth
@@ -81,7 +84,26 @@ class RHSMApi(object):
                 sys.exit(time.ctime() + ' - Exiting after %d failed attempts to retrive data from: '
                                         '%s' % (retries, response.url))
 
-    def systems(self, limit, offset):
-        payload = {'limit': limit, 'offset': offset}
-        json_output = self._get("systems", params=payload)
-        return json_output
+    def systems(self):
+        logging.debug('Started systems service call')
+        all_systems = []
+        offset = 0
+        while True:
+            batch_systems = self.fetch_systems(offset)
+            batch_count = batch_systems['pagination']['count']
+            if not batch_count:
+                break
+
+            logging.debug('Fetched another %s systems', batch_count)
+            offset += self.FETCH_LIMIT
+            for system_raw in batch_systems['body']:
+                logging.debug('Processing: %s', system_raw)
+                system = System.deserialize(system_raw)
+                all_systems.append(system)
+        return all_systems
+
+
+    def fetch_systems(self, offset):
+        payload = {'limit': self.FETCH_LIMIT, 'offset': offset}
+        data = self._get("systems", params=payload)
+        return data

@@ -12,23 +12,6 @@ import logging
 
 logging.getLogger(__name__)
 
-class Systems:
-    def __init__(self, pagination, body):
-        self.pagination = pagination
-        self.body = body
-
-    def get_body(self):
-        return self.body
-
-    def get_count(self):
-        return self.pagination['count']
-
-    def get_limit(self):
-        return self.pagination['limit']
-
-    def get_offset(self):
-        return self.pagination['offset']
-
 
 class System:
     def __init__(self, entitlement_count, entitlement_status, errata_counts, href, last_checkin,
@@ -73,3 +56,16 @@ class System:
 
     def serialize(self):
         return self.__dict__
+
+    @staticmethod
+    def deserialize(data):
+        if 'errataCounts' not in data:
+            data['errataCounts'] = None
+        if 'lastCheckin' not in data:
+            data['lastCheckin'] = None
+
+        system = System(data['entitlementCount'], data['entitlementStatus'],
+                        data['errataCounts'], data['href'], data['lastCheckin'],
+                        data['name'], data['type'], data['uuid'])
+
+        return system

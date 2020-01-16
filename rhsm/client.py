@@ -20,7 +20,7 @@ import time
 import sys
 import six
 from rhsm.service import RHSMAuthorizationCode, RHSMApi
-from rhsm.objects import System, Systems
+from rhsm.objects.system import System
 from rhsm.outputter import Outputter, OutputFormat, OUTPUT_FORMAT_DEFAULT
 
 logging.getLogger(__name__)
@@ -39,40 +39,14 @@ class RHSMClient(object):
         self.mode = self._args.mode
 
     def execute_systems(self):
-        total_count = 0
-        all_systems = list()
 
         authorization = RHSMAuthorizationCode(self._args.idp_token_url, self._args.client_id,
                                               self._args.token)
         authorization.refresh_token()
         api_service = RHSMApi(authorization)
-
-        limit = int(self._args.limit)
-
-        offset = 0
-        while True:
-            this_systems_json = api_service.systems(limit, offset)
-            this_systems = Systems(this_systems_json['pagination'], this_systems_json['body'])
-            if this_systems.get_count() != 0:
-                total_count = total_count + this_systems.get_count()
-                offset = offset + limit
-                for system in this_systems.get_body():
-                    if 'errataCounts' not in system:
-                        system['errataCounts'] = None
-                    if 'lastCheckin' not in system:
-                        system['lastCheckin'] = None
-
-                    this_system = System(
-                            system['entitlementCount'], system['entitlementStatus'],
-                            system['errataCounts'], system['href'], system['lastCheckin'],
-                            system['name'], system['type'], system['uuid'])
-
-                    all_systems.append(this_system)
-            else:
-                break
+        all_systems = api_service.systems()
 
         logging.debug(time.ctime() + " - Total Number of systems in list: %d" % len(all_systems))
-        logging.debug(time.ctime() + " - Total Number of systems from count: %d" % total_count)
 
         format = OutputFormat[self._args.format.upper()]
         outputter = Outputter(format, all_systems)
