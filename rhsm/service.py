@@ -93,16 +93,21 @@ class RHSMApi(object):
         while True:
             batch = fetch_func(offset)
             batch_count = batch['pagination']['count']
-            if not batch_count:
-                break
-
             logging.debug('Fetched %s more entries', batch_count)
             offset += self.FETCH_LIMIT
             for raw in batch['body']:
-                logging.debug('Processing: %s', raw)
+                logging.debug('Processing %s: %s', type(raw), raw)
                 obj = deserialize_func(raw)
                 batch_set.append(obj)
+            if batch_count < self.FETCH_LIMIT:
+                break
         return batch_set
+
+    def system(self, uuid):
+        data = self._get('system/' + uuid)
+        logging.debug('data is %s', data)
+        _system = System.deserialize(data)
+        return _system
 
     def systems(self):
         fetch_func = self.fetch_systems

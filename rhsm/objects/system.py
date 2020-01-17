@@ -77,10 +77,12 @@ class System:
             data['errataCounts'] = None
         if 'lastCheckin' not in data:
             data['lastCheckin'] = None
+        if 'hostname' not in data:
+            data['hostname'] = None
 
         system = System(data['entitlementCount'], data['entitlementStatus'],
                         data['errataCounts'], data['href'], data['lastCheckin'],
-                        data['name'], data['type'], data['uuid']. data['hostname'])
+                        data['name'], data['type'], data['uuid'], data['hostname'])
 
         return system
 

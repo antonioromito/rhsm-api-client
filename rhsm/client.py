@@ -74,6 +74,11 @@ class RHSMClient(object):
         raise NotImplementedError
 
 
+def add_system_command_options(subparsers):
+    system_parser = subparsers.add_parser('system', help='Fetch a single system.')
+    system_parser.add_argument('-u', '--uuid', help='The UUID of the system.')
+
+
 def add_systems_command_options(subparsers):
     systems_parser = subparsers.add_parser('systems', help='Fetch a list of systems.')
 
@@ -112,9 +117,10 @@ def _get_parser():
     group.add_argument('-f', '--format', help='The format to output data as.',
                        choices=OutputFormat.as_args(), default=OUTPUT_FORMAT_DEFAULT)
 
-    subparsers = parser.add_subparsers(help=('Program mode: systems, allocations, subscriptions, '
+    subparsers = parser.add_subparsers(help=('Program mode: system, systems, allocations, subscriptions, '
                                        'errata, packages)'), dest='mode')
 
+    add_system_command_options(subparsers)
     add_systems_command_options(subparsers)
     add_allocations_command_options(subparsers)
     add_subscriptions_command_options(subparsers)
