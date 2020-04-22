@@ -103,17 +103,31 @@ class RHSMApi(object):
                 break
         return batch_set
 
-    def system(self, uuid):
-        data = self._get('system/' + uuid)
-        logging.debug('data is %s', data)
-        _system = System.deserialize(data)
-        return _system
+    def systems(self, uuid=None, include=None):
+        if uuid is None:
+            fetch_func = self.fetch_systems
+            deserialize_func = System.deserialize
+            batch = self.batch_fetch(fetch_func, deserialize_func)
+            return batch
+        elif uuid and include is None:
+            fetch_func = self.fetch_system(uuid, include)
+            logging.debug('data is %s', fetch_func)
+            _system = System.deserialize(fetch_func['body'])
+            return _system
+        elif uuid and include:
+            fetch_func = self.fetch_system(uuid, include)
+            logging.debug('data is %s', fetch_func)
+            _system = System.deserialize(fetch_func['body'])
+            return _system
 
-    def systems(self):
-        fetch_func = self.fetch_systems
-        deserialize_func = System.deserialize
-        batch = self.batch_fetch(fetch_func, deserialize_func)
-        return batch
+    def fetch_system(self, uuid, include=None):
+        if include is None:
+            data = self._get("systems/" + uuid)
+        else:
+            data = self._get("systems/" + uuid + "?include=" + include)
+        print(data)
+        logging.debug('data is %s', data)
+        return data
 
     def fetch_systems(self, offset):
         payload = {'limit': self.FETCH_LIMIT, 'offset': offset}

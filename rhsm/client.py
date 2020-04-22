@@ -52,8 +52,8 @@ class RHSMClient(object):
 
     def execute_systems(self):
         service = self.get_service()
-        all_systems = service.systems()
-        self.output(all_systems)
+        systems = service.systems(uuid=self._args.uuid, include=self._args.include)
+        self.output(systems)
 
     def execute_allocations(self):
         service = self.get_service()
@@ -74,18 +74,21 @@ class RHSMClient(object):
         raise NotImplementedError
 
 
-def add_system_command_options(subparsers):
-    system_parser = subparsers.add_parser('system', help='Fetch a single system.')
-    system_parser.add_argument('-u', '--uuid', help='The UUID of the system.')
-
-
 def add_systems_command_options(subparsers):
     systems_parser = subparsers.add_parser('systems', help='Fetch a list of systems.')
+
+    systems_parser.add_argument('-u', '--uuid', help='The UUID of the system.', default=None, required=False,
+                                action='store')
+
+    systems_parser.add_argument("--include", help="Get details for a system specified by UUID.", default=None,
+                                required=False, choices=['facts', 'entitlements', 'installedProducts'],
+                                action='store')
 
     systems_parser.add_argument('-l', '--limit', help=('The default and max number of result in a '
                                                        'response are 100.'),
                                 default=100, required=False, action='store')
-
+    systems_parser.add_argument('-f', '--format', help='The format to output data as.',
+                       choices=OutputFormat.as_args(), default=OUTPUT_FORMAT_DEFAULT)
 
 def add_allocations_command_options(subparsers):
     subparsers.add_parser('allocations', help='Generate allocations CSV report.')
@@ -114,13 +117,11 @@ def _get_parser():
                                 '/protocol/openid-connect/token'))
     group.add_argument('-t', '--token', help='Red Hat Customer Portal offline token',
                        required=True, action='store')
-    group.add_argument('-f', '--format', help='The format to output data as.',
-                       choices=OutputFormat.as_args(), default=OUTPUT_FORMAT_DEFAULT)
+
 
     subparsers = parser.add_subparsers(help=('Program mode: system, systems, allocations, subscriptions, '
                                        'errata, packages)'), dest='mode')
 
-    add_system_command_options(subparsers)
     add_systems_command_options(subparsers)
     add_allocations_command_options(subparsers)
     add_subscriptions_command_options(subparsers)
