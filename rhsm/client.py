@@ -7,7 +7,7 @@ to collect data from your account.
 
 # Copyright (C) 2019 Antonio Romito (aromito@redhat.com)
 #
-# This file is part of the sos project: https://github.com/aromito/rhsm-api-client
+# This file is part of the sos project: https://github.com/antonioromito/rhsm-api-client
 #
 # This copyrighted material is made available to anyone wishing to use,
 # modify, copy, or redistribute it subject to the terms and conditions of
@@ -46,13 +46,20 @@ class RHSMClient(object):
         return api_service
 
     def output(self, batch):
-        format = OutputFormat[self._args.format.upper()]
-        outputter = Outputter(format, batch)
+        outformat = OutputFormat[self._args.format.upper()]
+        outputter = Outputter(outformat, batch)
         outputter.write()
 
     def execute_systems(self):
         service = self.get_service()
-        systems = service.systems(uuid=self._args.uuid, include=self._args.include)
+        systems = None
+        if self._args.uuid is None and self._args.include is None:
+            systems = service.systems()
+        elif self._args.uuid and self._args.include is None:
+            systems = service.systems(uuid=self._args.uuid)
+        elif self._args.uuid and self._args.include:
+            systems = service.systems(uuid=self._args.uuid, include=self._args.include)
+        logging.debug(systems)
         self.output(systems)
 
     def execute_allocations(self):

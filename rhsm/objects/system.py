@@ -1,6 +1,6 @@
 # Copyright (C) 2019 Antonio Romito (aromito@redhat.com)
 #
-# This file is part of the sos project: https://github.com/aromito/rhsm-api-client
+# This file is part of the sos project: https://github.com/antonioromito/rhsm-api-client
 #
 # This copyrighted material is made available to anyone wishing to use,
 # modify, copy, or redistribute it subject to the terms and conditions of
@@ -27,16 +27,18 @@ class System:
         'enhancementCount': 'Enhancements',
     }
 
-    def __init__(self, entitlement_count, entitlement_status, errata_counts, href, last_checkin,
-                 name, stype, uuid, hostname):
-        self.entitlementCount = entitlement_count
-        self.entitlementStatus = entitlement_status
-        self.errataCounts = errata_counts
-        self.href = href
-        self.lastCheckin = last_checkin
+    def __init__(self, uuid, name, stype, last_checkin, entitlement_count, entitlement_status, errata_counts, href,
+                 hostname):
+
+        self.uuid = uuid
         self.name = name
         self.type = stype
-        self.uuid = uuid
+        self.lastCheckin = last_checkin
+        self.entitlementStatus = entitlement_status
+
+        self.entitlementCount = entitlement_count
+        self.errataCounts = errata_counts
+        self.href = href
         self.hostname = hostname
 
         self.securityCount = None
@@ -80,9 +82,7 @@ class System:
         if 'hostname' not in data:
             data['hostname'] = None
 
-        system = System(data['entitlementCount'], data['entitlementStatus'],
-                        data['errataCounts'], data['href'], data['lastCheckin'],
-                        data['name'], data['type'], data['uuid'], data['hostname'])
-
+        system = System(uuid=data['uuid'], name=data['name'], stype=data['type'], last_checkin=data['lastCheckin'],
+                        errata_counts=data['errataCounts'], entitlement_count=data['entitlementCount'],
+                        entitlement_status=data['entitlementStatus'], href=data['href'], hostname=data['hostname'])
         return system
-

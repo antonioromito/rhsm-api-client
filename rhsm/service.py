@@ -8,7 +8,6 @@
 #
 # See the LICENSE file in the source distribution for further information.
 import logging
-import json
 import requests
 import time
 import sys
@@ -18,6 +17,7 @@ from rhsm.objects.allocation import Allocation
 from rhsm.objects.errata import Errata
 from rhsm.objects.subscription import Subscription
 from rhsm.objects.system import System
+from rhsm.objects.system_uuid import SystemUUID
 
 logging.getLogger(__name__)
 
@@ -103,35 +103,41 @@ class RHSMApi(object):
                 break
         return batch_set
 
+    def single_fetch(self, fetch_func, deserialize_func):
+        single = fetch_func
+        obj = deserialize_func(single['body'])
+        return obj
+
     def systems(self, uuid=None, include=None):
         if uuid is None:
             fetch_func = self.fetch_systems
             deserialize_func = System.deserialize
             batch = self.batch_fetch(fetch_func, deserialize_func)
+            logging.debug('data is %s', fetch_func)
             return batch
         elif uuid and include is None:
-            fetch_func = self.fetch_system(uuid, include)
+            fetch_func = self.fetch_systems(offset=None, uuid=uuid)
+            deserialize_func = SystemUUID.deserialize
+            logging.debug("Deserialize :" + str(deserialize_func))
+            single = self.single_fetch(fetch_func, deserialize_func)
             logging.debug('data is %s', fetch_func)
-            _system = System.deserialize(fetch_func['body'])
-            return _system
+            return single
         elif uuid and include:
-            fetch_func = self.fetch_system(uuid, include)
+            fetch_func = self.fetch_systems(offset=None, uuid=uuid, include=include)
+            deserialize_func = SystemUUID.deserialize
+            batch = self.batch_fetch(fetch_func, deserialize_func)
             logging.debug('data is %s', fetch_func)
-            _system = System.deserialize(fetch_func['body'])
-            return _system
+            return batch
 
-    def fetch_system(self, uuid, include=None):
-        if include is None:
+    def fetch_systems(self, offset, uuid=None, include=None):
+        if uuid is None:
+            payload = {'limit': self.FETCH_LIMIT, 'offset': offset}
+            data = self._get("systems", params=payload)
+        elif uuid and include is None:
             data = self._get("systems/" + uuid)
-        else:
-            data = self._get("systems/" + uuid + "?include=" + include)
-        print(data)
-        logging.debug('data is %s', data)
-        return data
-
-    def fetch_systems(self, offset):
-        payload = {'limit': self.FETCH_LIMIT, 'offset': offset}
-        data = self._get("systems", params=payload)
+        elif uuid and include:
+            payload = {'include': include}
+            data = self._get("systems/" + uuid, params=payload)
         return data
 
     def allocations(self):
