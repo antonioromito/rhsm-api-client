@@ -59,8 +59,12 @@ class RHSMClient(object):
             systems = service.systems(uuid=self._args.uuid)
         elif self._args.uuid and self._args.include:
             systems = service.systems(uuid=self._args.uuid, include=self._args.include)
-        logging.debug(systems)
         self.output(systems)
+
+    def execute_images(self):
+        service = self.get_service()
+        checksum = self._args.checksum
+        service.images(checksum=checksum)
 
     def execute_allocations(self):
         service = self.get_service()
@@ -113,6 +117,12 @@ def add_packages_command_options(subparsers):
     subparsers.add_parser('packages', help='Generate packages CSV report.')
 
 
+def add_images_command_options(subparsers):
+    image_parser = subparsers.add_parser('images', help='Download an image sfor a given checksum.')
+    image_parser.add_argument('--checksum', help='The checksum of the image to donwload.', required=True,
+                                action='store')
+
+
 def _get_parser():
     parser = argparse.ArgumentParser(description="RHSM API implementation")
     group = parser.add_argument_group('authentication')
@@ -134,6 +144,7 @@ def _get_parser():
     add_subscriptions_command_options(subparsers)
     add_errata_command_options(subparsers)
     add_packages_command_options(subparsers)
+    add_images_command_options(subparsers)
 
     return parser
 
@@ -152,3 +163,5 @@ def main():
         rhsm.execute_errata()
     elif rhsm.mode == "packages":
         rhsm.execute_packages()
+    elif rhsm.mode == "images":
+        rhsm.execute_images()

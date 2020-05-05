@@ -18,8 +18,10 @@ from rhsm.objects.errata import Errata
 from rhsm.objects.subscription import Subscription
 from rhsm.objects.system import System
 from rhsm.objects.system_uuid import SystemUUID
+from rhsm.objects.image import Image
 
 logging.getLogger(__name__)
+
 
 class RHSMAuthorizationCode(object):
     TOKEN_PATH = ''
@@ -45,30 +47,34 @@ class RHSMApi(object):
     def __init__(self, auth=None):
         self.auth = auth
 
-    def _get(self, endpoint, params=None):
+    def _get(self, endpoint, params=None , stream=False):
         retries = 0
         success = False
         while not success and retries < 3:
             url = self.API_URL + '/' + endpoint
             logging.debug(time.ctime() + ' - Starting request: %s with params: %s ' % (url, params))
             if self.auth:
+                # TO DO:
+                # Implement the response.elapsed properties that returns a timedelta object with
+                # the time elapsed from sending the request to the arrival of the response.
+                #
                 try:
                     t1 = time.time()
-                    response = self.auth.session.get(url, params=params)
+                    response = self.auth.session.get(url, params=params, stream=stream)
                     t2 = time.time()
                 except TokenExpiredError:
                     logging.debug(time.ctime() + ' - Token has expired. Refreshing token...')
                     self.auth.refresh_token()
                     t1 = time.time()
-                    response = self.auth.session.get(url, params=params)
+                    response = self.auth.session.get(url, params=params, stream=stream)
                     t2 = time.time()
             else:
                 t1 = time.time()
-                response = requests.get(url, params=params)
+                response = requests.get(url, params=params, stream=stream)
                 t2 = time.time()
             logging.debug(time.ctime() + (' - The Round Trip Time (RTT) for %s is %.4fs. '
-                                  'Status code is: %s') %
-                  (response.url, (t2 - t1), response.status_code))
+                                          'Status code is: %s') %
+                          (response.url, (t2 - t1), response.status_code))
 
             try:
                 response.raise_for_status()
@@ -82,12 +88,23 @@ class RHSMApi(object):
                                      'number [%d]' % (str(wait), retries))
 
             if response.status_code == requests.codes.ok:
-                return response.json()
+                # HERE WE NEED TO INTERCEPT 307 REDIRECT AND ITS JSON RESPONSE (CASE OF DOWNLOAD ISO)
+                #
+                # if response.history:
+                #    before_redirect = response.history
+                #
+                if response.headers['content-type'] == 'application/json':
+                    return response.json()
+                elif response.headers['content-type'] == 'application/octet-stream':
+                    return response
+                else:
+                    sys.exit(time.ctime() + ' - Unmanaged Content-Type')
+
             elif response.status_code != requests.codes.ok and retries == 3:
                 sys.exit(time.ctime() + ' - Exiting after %d failed attempts to retrive data from: '
                                         '%s' % (retries, response.url))
 
-    def batch_fetch(self, fetch_func, deserialize_func):
+    def json_batch_fetch(self, fetch_func, deserialize_func):
         batch_set = []
         offset = 0
         while True:
@@ -103,7 +120,7 @@ class RHSMApi(object):
                 break
         return batch_set
 
-    def single_fetch(self, fetch_func, deserialize_func):
+    def json_single_fetch(self, fetch_func, deserialize_func):
         single = fetch_func
         obj = deserialize_func(single['body'])
         return obj
@@ -112,22 +129,22 @@ class RHSMApi(object):
         if uuid is None:
             fetch_func = self.fetch_systems
             deserialize_func = System.deserialize
-            batch = self.batch_fetch(fetch_func, deserialize_func)
+            batch = self.json_batch_fetch(fetch_func, deserialize_func)
             logging.debug('data is %s', fetch_func)
             return batch
         elif uuid and include is None:
             fetch_func = self.fetch_systems(offset=None, uuid=uuid)
             deserialize_func = SystemUUID.deserialize
             logging.debug("Deserialize :" + str(deserialize_func))
-            single = self.single_fetch(fetch_func, deserialize_func)
+            single = self.json_single_fetch(fetch_func, deserialize_func)
             logging.debug('data is %s', fetch_func)
             return single
         elif uuid and include:
             fetch_func = self.fetch_systems(offset=None, uuid=uuid, include=include)
             deserialize_func = SystemUUID.deserialize
-            batch = self.batch_fetch(fetch_func, deserialize_func)
+            single = self.json_single_fetch(fetch_func, deserialize_func)
             logging.debug('data is %s', fetch_func)
-            return batch
+            return single
 
     def fetch_systems(self, offset, uuid=None, include=None):
         if uuid is None:
@@ -143,7 +160,7 @@ class RHSMApi(object):
     def allocations(self):
         fetch_func = self.fetch_allocations
         deserialize_func = Allocation.deserialize
-        batch = self.batch_fetch(fetch_func, deserialize_func)
+        batch = self.json_batch_fetch(fetch_func, deserialize_func)
         return batch
 
     def fetch_allocations(self, offset):
@@ -154,7 +171,7 @@ class RHSMApi(object):
     def errata(self):
         fetch_func = self.fetch_errata
         deserialize_func = Errata.deserialize
-        batch = self.batch_fetch(fetch_func, deserialize_func)
+        batch = self.json_batch_fetch(fetch_func, deserialize_func)
         return batch
 
     def fetch_errata(self, offset):
@@ -165,10 +182,29 @@ class RHSMApi(object):
     def subscriptions(self):
         fetch_func = self.fetch_subscription
         deserialize_func = Subscription.deserialize
-        batch = self.batch_fetch(fetch_func, deserialize_func)
+        batch = self.json_batch_fetch(fetch_func, deserialize_func)
         return batch
 
     def fetch_subscription(self, offset):
         payload = {'limit': self.FETCH_LIMIT, 'offset': offset}
         data = self._get("subscriptions", params=payload)
+        return data
+
+    def images(self, checksum=None):
+        if checksum:
+            fetch_func = self.fetch_images(checksum=checksum)
+            deserialize_func = Image.deserialize
+            image = self.json_single_fetch(fetch_func['response_json'], deserialize_func)
+            image.write_to_file(fetch_func['response_data'], image.get_filename(checksum))
+
+    def fetch_images(self, checksum):
+        response = self._get("images/" + checksum + "/download", stream=True)
+        data = {'response_json': None, 'response_data': None}
+        # Getting JSON file info from 307 redirect
+        #
+        if response.history[0] and response.history[0].headers['content-type'] == 'application/json':
+            data['response_json'] = response.history[0].json()
+        # ISO Data from get request
+        #
+        data['response_data'] = response
         return data

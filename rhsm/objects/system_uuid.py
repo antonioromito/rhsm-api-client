@@ -50,21 +50,14 @@ class SystemUUID:
         self.errataApplicabilityCounts = errata_applicability_counts
         self.entitlementsAttachedCount = entitlements_attached_count
 
-        #self.securityCount = None
-        #self.bugfixCount = None
-        #self.enhancementCount = None
+    def set_facts(self, facts):
+        self.facts = facts
 
-        #if self.errataApplicabilityCounts['valid'] is True:
-        #    self.set_errata_counts()
-        #elif self.errataApplicabilityCounts['valid'] is False:
-        #    self.securityCount = 0
-        #    self.bugfixCount = 0
-        #    self.enhancementCount = 0
+    def set_entitlementsAttached(self, entitlementsAttached):
+        self.entitlementsAttached = entitlementsAttached
 
-    #def set_errata_counts(self):
-    #    self.securityCount = self.errataApplicabilityCounts['value']['securityCount']
-    #    self.bugfixCount = self.errataApplicabilityCounts['value']['bugfixCount']
-    #    self.enhancementCount = self.errataApplicabilityCounts['value']['enhancementCount']
+    def set_installedProducts(self, installedProducts):
+        self.installedProducts = installedProducts
 
     def get_keys(self):
         keys = [self.name, self.uuid, self.enhancementCount, self.type, "Not Available",
@@ -84,12 +77,25 @@ class SystemUUID:
 
     @staticmethod
     def deserialize(data):
-        system = SystemUUID(uuid=data['uuid'], name=data['name'], stype=data['type'], created_date=data['createdDate'],
-                            created_by=data['createdBy'], last_checkin=data['lastCheckin'],
-                            installed_products_count=data['installedProductsCount'],
-                            entitlement_status=data['entitlementStatus'], compliance_status=data['complianceStatus'],
-                            auto_attach_setting=data['autoAttachSetting'],
-                            service_level_preference=data['serviceLevelPreference'], facts_count=data['factsCount'],
-                            errata_applicability_counts=data['errataApplicabilityCounts'],
-                            entitlements_attached_count=data['entitlementsAttachedCount'])
+        system = SystemUUID(uuid=data['uuid'], name=data['name'], stype=data['type'],
+                                created_date=data['createdDate'], created_by=data['createdBy'],
+                                last_checkin=data['lastCheckin'],
+                                installed_products_count=data['installedProductsCount'],
+                                entitlement_status=data['entitlementStatus'],
+                                compliance_status=data['complianceStatus'],
+                                auto_attach_setting=data['autoAttachSetting'],
+                                service_level_preference=data['serviceLevelPreference'],
+                                facts_count=data['factsCount'],
+                                errata_applicability_counts=data['errataApplicabilityCounts'],
+                                entitlements_attached_count=data['entitlementsAttachedCount'])
+
+        if 'facts' in data:
+            system.set_facts(data['facts'])
+
+        if 'entitlementsAttached' in data:
+            system.set_entitlementsAttached(data['entitlementsAttached'])
+
+        if 'installedProducts' in data:
+            system.set_installedProducts(data['installedProducts'])
+
         return system
