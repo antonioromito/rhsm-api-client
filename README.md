@@ -132,7 +132,7 @@ export RHSM_API_TOKEN=SOME_LONG_TOKEN_HERE
 
 Then when calling your scripts, the token can be recalled via the variable:
 ```
-$ ./rhsm-cli -t $RHSM_API_TOKEN systems -o /path/to/systems.csv -l 100
+$ ./rhsm-cli -t $RHSM_API_TOKEN systems
 ```
 
 ## Examples
