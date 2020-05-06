@@ -27,10 +27,8 @@ class Image:
 
     @staticmethod
     def write_to_file(data, filename):
-        file_name = filename
-
-        with open(file_name, "wb") as f:
-            print("Downloading %s" % file_name)
+        with open(filename, "wb") as f:
+            print("Downloading %s" % filename)
             response = data
             total_length = response.headers.get('content-length')
 

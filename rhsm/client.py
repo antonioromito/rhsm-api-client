@@ -133,8 +133,8 @@ def _get_parser():
     group.add_argument('-t', '--token', help='Red Hat Customer Portal offline token',
                        required=True, action='store')
 
-    subparsers = parser.add_subparsers(help=('Program mode: system, systems, allocations, subscriptions, '
-                                       'errata, packages)'), dest='mode')
+    subparsers = parser.add_subparsers(help=('Program mode: systems, allocations, subscriptions, '
+                                       'errata, packages, images)'), dest='mode')
 
     add_systems_command_options(subparsers)
     add_allocations_command_options(subparsers)
