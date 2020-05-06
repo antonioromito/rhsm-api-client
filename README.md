@@ -16,7 +16,38 @@ Using APIs in RHSM can help you more effectively keep track of and automate how 
 In order to transition to using APIs for Red Hat Subscription Management, Red Hat has created a tech preview program for early access and feedback. Red Hat is in the process of decommissioning Red Hat Network (RHN), including access to its APIs. As a part of this effort, Red Hat has been developing and documenting support for RHSM.
 ```
 
-## Getting Started
+# Getting Started
+
+## Installation instructions in a virtualenv
+
+* Clone the git repository:
+```
+
+```
+
+* Create and activate the virtualenv
+
+```
+$ cd rhsm-api-client
+$ virtualenv .venv
+$ . .venv/bin/activate
+```
+
+* Install the required packages
+
+```
+$ pip install -r requirements.txt
+```
+
+* Install the `rhsm-api-client` tool
+
+```
+$ python setup.py install
+```
+
+The `rhsm-cli` command is now added to the `PATH` environment variable and can be executed
+
+## Instruction for a system-wide install
 
 ### Prerequisites
 
@@ -37,10 +68,7 @@ Before to start script execution, you'll need the following information:
 * Your Customer Portal credentials (https://access.redhat.com/)
 * Client ID and Secret provided by Red Hat (https://access.redhat.com/management/api)
  
-
-### Installing
-
-#### Installing instructions for Fedora 29:
+#### Required packages installation instructions for Fedora 29:
 
 * RPM Packages installation for Python3:
 ```
@@ -54,7 +82,7 @@ $ sudo yum install python2-oauth2client
 $ sudo yum install python2-requests-oauthlib
 ```
     
-#### Installing instructions for RHEL 7.6 via EPEL repos:
+#### Required packages installation instructions for RHEL 7.6 via EPEL repos:
        
 * Install EPEL repo rpm
     
@@ -81,11 +109,11 @@ sudo yum install python2-oauth2client python2-requests-oauthlib
 * Cloning git repository:
 ```
 $ git clone https://github.com/antonioromito/rhsm-api-client
+$ cd rhsm-api-client
+$ python setup.py install
 ```  
-  
-## Deployment
 
-This script can be executed from your preferred path
+Now the command `rhsm-cli` can be executed from your preferred path.
 
 ## Usage
 
@@ -102,7 +130,7 @@ positional arguments:
     subscriptions       Generate subscriptions CSV report.
     errata              Generate errata CSV report.
     packages            Generate packages CSV report.
-    images              Download an image sfor a given checksum.
+    images              Download an images for a given checksum.
 
 optional arguments:
   -h, --help            show this help message and exit
