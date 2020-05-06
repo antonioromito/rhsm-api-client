@@ -100,19 +100,27 @@ def add_systems_command_options(subparsers):
 
 
 def add_allocations_command_options(subparsers):
-    subparsers.add_parser('allocations', help='Generate allocations CSV report.')
+    allocations_parser = subparsers.add_parser('allocations', help='Generate allocations CSV report.')
+    allocations_parser.add_argument('-f', '--format', help='The format to output data as.',
+                                choices=OutputFormat.as_args(), default=OUTPUT_FORMAT_DEFAULT)
 
 
 def add_subscriptions_command_options(subparsers):
-    subparsers.add_parser('subscriptions', help='Generate subscriptions CSV report.')
+    subscriptions_parser = subparsers.add_parser('subscriptions', help='Generate subscriptions CSV report.')
+    subscriptions_parser.add_argument('-f', '--format', help='The format to output data as.',
+                                choices=OutputFormat.as_args(), default=OUTPUT_FORMAT_DEFAULT)
 
 
 def add_errata_command_options(subparsers):
-    subparsers.add_parser('errata', help='Generate errata CSV report.')
+    errata_parser = subparsers.add_parser('errata', help='Generate errata CSV report.')
+    errata_parser.add_argument('-f', '--format', help='The format to output data as.',
+                                choices=OutputFormat.as_args(), default=OUTPUT_FORMAT_DEFAULT)
 
 
 def add_packages_command_options(subparsers):
-    subparsers.add_parser('packages', help='Generate packages CSV report.')
+    packages_parser = subparsers.add_parser('packages', help='Generate packages CSV report.')
+    packages_parser.add_argument('-f', '--format', help='The format to output data as.',
+                                choices=OutputFormat.as_args(), default=OUTPUT_FORMAT_DEFAULT)
 
 
 def add_images_command_options(subparsers):

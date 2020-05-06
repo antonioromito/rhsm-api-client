@@ -19,6 +19,7 @@ class OutputFormat(Enum):
 class Outputter:
     def __init__(self, format, data):
         self.formatter = format
+
         if format == OutputFormat.JSON:
             self.formatter = JSON
         elif format == OutputFormat.JSON_PRETTY:
