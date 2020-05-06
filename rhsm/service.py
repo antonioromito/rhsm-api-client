@@ -47,7 +47,7 @@ class RHSMApi(object):
     def __init__(self, auth=None):
         self.auth = auth
 
-    def _get(self, endpoint, params=None , stream=False):
+    def _get(self, endpoint, params=None, stream=False):
         retries = 0
         success = False
         while not success and retries < 3:
@@ -84,8 +84,8 @@ class RHSMApi(object):
                 retries += 1
                 time.sleep(wait)
                 logging.debug(time.ctime() + ' - Response status code code indicate a failed attempt to '
-                                     'retrive data. Waiting %s secs and re-trying... Attempt '
-                                     'number [%d]' % (str(wait), retries))
+                                             'retrieve data. Waiting %s secs and re-trying... Attempt '
+                                             'number [%d]' % (str(wait), retries))
 
             if response.status_code == requests.codes.ok:
                 # HERE WE NEED TO INTERCEPT 307 REDIRECT AND ITS JSON RESPONSE (CASE OF DOWNLOAD ISO)
@@ -98,7 +98,7 @@ class RHSMApi(object):
                 elif response.headers['content-type'] == 'application/octet-stream':
                     return response
                 else:
-                    sys.exit(time.ctime() + ' - Unmanaged Content-Type')
+                    sys.exit(time.ctime() + ' - Content-Type not managed')
 
             elif response.status_code != requests.codes.ok and retries == 3:
                 sys.exit(time.ctime() + ' - Exiting after %d failed attempts to retrive data from: '
@@ -120,7 +120,8 @@ class RHSMApi(object):
                 break
         return batch_set
 
-    def json_single_fetch(self, fetch_func, deserialize_func):
+    @staticmethod
+    def json_single_fetch(fetch_func, deserialize_func):
         single = fetch_func
         obj = deserialize_func(single['body'])
         return obj

@@ -16,11 +16,8 @@ to collect data from your account.
 # See the LICENSE file in the source distribution for further information.
 import argparse
 import logging
-import time
-import sys
 import six
 from rhsm.service import RHSMAuthorizationCode, RHSMApi
-from rhsm.objects.system import System
 from rhsm.outputter import Outputter, OutputFormat, OUTPUT_FORMAT_DEFAULT
 
 logging.getLogger(__name__)
@@ -99,7 +96,8 @@ def add_systems_command_options(subparsers):
                                                        'response are 100.'),
                                 default=100, required=False, action='store')
     systems_parser.add_argument('-f', '--format', help='The format to output data as.',
-                       choices=OutputFormat.as_args(), default=OUTPUT_FORMAT_DEFAULT)
+                                choices=OutputFormat.as_args(), default=OUTPUT_FORMAT_DEFAULT)
+
 
 def add_allocations_command_options(subparsers):
     subparsers.add_parser('allocations', help='Generate allocations CSV report.')
@@ -120,7 +118,7 @@ def add_packages_command_options(subparsers):
 def add_images_command_options(subparsers):
     image_parser = subparsers.add_parser('images', help='Download an image sfor a given checksum.')
     image_parser.add_argument('--checksum', help='The checksum of the image to donwload.', required=True,
-                                action='store')
+                              action='store')
 
 
 def _get_parser():
@@ -134,7 +132,6 @@ def _get_parser():
                                 '/protocol/openid-connect/token'))
     group.add_argument('-t', '--token', help='Red Hat Customer Portal offline token',
                        required=True, action='store')
-
 
     subparsers = parser.add_subparsers(help=('Program mode: system, systems, allocations, subscriptions, '
                                        'errata, packages)'), dest='mode')

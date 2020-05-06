@@ -1,3 +1,5 @@
+six
+oauthlib
 oauth2client
 requests-oauthlib
 requests

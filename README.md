@@ -90,61 +90,30 @@ This script can be executed from your preferred path
 ## Usage
 
 ```
-usage: rhsm-cli [-h] [-c CLIENT_ID] [-i IDP_TOKEN_URL] -t TOKEN
-                {systems,allocations,subscriptions,erratas,packages} ...
+usage: rhsm-cli [-h] [-c CLIENT_ID] [-i IDP_TOKEN_URL] -t TOKEN {systems,allocations,subscriptions,errata,packages,images} ...
 
 RHSM API implementation
 
 positional arguments:
-  {systems,allocations,subscriptions,erratas,packages}
-                        Program mode: systems, allocations, subscriptions,
-                        errata, packages)
-    systems             Generate systems CSV report.
+  {systems,allocations,subscriptions,errata,packages,images}
+                        Program mode: system, systems, allocations, subscriptions, errata, packages)
+    systems             Fetch a list of systems.
     allocations         Generate allocations CSV report.
     subscriptions       Generate subscriptions CSV report.
-    erratas             Generate erratas CSV report.
+    errata              Generate errata CSV report.
     packages            Generate packages CSV report.
+    images              Download an image sfor a given checksum.
 
 optional arguments:
   -h, --help            show this help message and exit
 
 authentication:
   -c CLIENT_ID, --client_id CLIENT_ID
-                        Red Hat Customer Portal OIDC client (default: rhsm-
-                        api)
+                        Red Hat Customer Portal OIDC client (default: rhsm-api)
   -i IDP_TOKEN_URL, --idp_token_url IDP_TOKEN_URL
-                        Red Hat Customer Portal SSO Token URL (default:
-                        https://sso.redhat.com/auth/realms/redhat-
-                        external/protocol/openid-connect/token)
+                        Red Hat Customer Portal SSO Token URL (default: https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token)
   -t TOKEN, --token TOKEN
                         Red Hat Customer Portal offline token
-
-```
-
-## Examples
-
-* Generate CSV report listing all systems
-
-Helper for "systems" CSV function provide specific instructions on the arguments that the cli expects:
-
-```
-$ ./rhsm-cli systems -h
-usage: rhsm-cli systems [-h] -o OUTPUT_CSV [-l LIMIT]
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -o OUTPUT_CSV, --output_csv OUTPUT_CSV
-                        Output CSV file
-  -l LIMIT, --limit LIMIT
-                        The default and max number of result in a response are
-                        100.
-
-```
-
-Here below and example of CSV report generation command line arguments usage:
-
-```
-$ ./rhsm-cli -t 'MyOfflineToken' systems -o /path/to/systems.csv -l 100
 ```
 
 ## Offline Token Storage
@@ -165,6 +134,55 @@ Then when calling your scripts, the token can be recalled via the variable:
 ```
 $ ./rhsm-cli -t $RHSM_API_TOKEN systems -o /path/to/systems.csv -l 100
 ```
+
+## Examples
+
+* Generate CSV report listing all systems
+
+Helper for "systems" CSV function provide specific instructions on the arguments that the cli expects:
+
+```
+$ ./rhsm-cli systems -h
+usage: rhsm-cli systems [-h] [-u UUID] [--include {facts,entitlements,installedProducts}] [-l LIMIT] [-f {json,json_pretty,csv}]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -u UUID, --uuid UUID  The UUID of the system.
+  --include {facts,entitlements,installedProducts}
+                        Get details for a system specified by UUID.
+  -l LIMIT, --limit LIMIT
+                        The default and max number of result in a response are 100.
+  -f {json,json_pretty,csv}, --format {json,json_pretty,csv}
+                        The format to output data as.
+
+```
+
+Here below you can find some example:
+
+* CSV report generation. "systems" command line arguments usage:
+
+```
+$ ./rhsm-cli -t $RHSM_API_TOKEN systems -f csv
+```
+
+* JSON report generation. "systems" command line arguments usage:
+
+```
+$ ./rhsm-cli -t $RHSM_API_TOKEN systems -f json
+```
+
+* JSON output in readable format generation for "systems" with "facts" gathering for a given UUID system.
+
+```
+$ ./rhsm-cli -t $RHSM_API_TOKEN systems --include facts -u {UUID} -f json_pretty
+```
+
+* Red Hat Image download starting from its checksum shown on the Red Hat Portal in download section.
+
+```
+$ ./rhsm-cli -t $RHSM_API_TOKEN images --checksum {CHECKSUM}
+```
+
 
 ## License
 
