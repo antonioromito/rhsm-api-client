@@ -22,11 +22,10 @@ In order to transition to using APIs for Red Hat Subscription Management, Red Ha
 
 * Clone the git repository:
 ```
-
+$ git clone https://github.com/antonioromito/rhsm-api-client
 ```
 
 * Create and activate the virtualenv
-
 ```
 $ cd rhsm-api-client
 $ virtualenv .venv
@@ -34,13 +33,11 @@ $ . .venv/bin/activate
 ```
 
 * Install the required packages
-
 ```
 $ pip install -r requirements.txt
 ```
 
 * Install the `rhsm-api-client` tool
-
 ```
 $ python setup.py install
 ```
