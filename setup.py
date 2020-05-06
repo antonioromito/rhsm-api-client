@@ -12,5 +12,5 @@ setup(
     url='https://github.com/antonioromito/rhsm-api-client',
     license='GPLv2+',
     scripts=['rhsm-cli'],
-    packages=['rhsm']
+    packages=['rhsm', 'rhsm.objects', 'rhsm.formats']
 )
