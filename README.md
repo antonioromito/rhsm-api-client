@@ -44,7 +44,7 @@ $ python setup.py install
 
 The `rhsm-cli` command is now added to the `PATH` environment variable and can be executed
 
-## Instruction for a system-wide install
+## Installation instruction for a system-wide install
 
 ### Prerequisites
 
@@ -101,7 +101,7 @@ $ sudo yum install git
 sudo yum install python2-oauth2client python2-requests-oauthlib
 ```
 
-### rhsm-api-client installing instructions:
+### rhsm-api-client install instructions:
 
 * Cloning git repository:
 ```
