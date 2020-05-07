@@ -5,6 +5,6 @@ class JSON:
     @staticmethod
     def write(data):
         if isinstance(data, list):
-            print(f_json.dumps([d.serialize() for d in data]))
+            print(json.dumps([d.serialize() for d in data]))
         else:
-            print(f_json.dumps(data.serialize()))
+            print(json.dumps(data.serialize()))
