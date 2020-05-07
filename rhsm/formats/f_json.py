@@ -1,4 +1,4 @@
-import f_json
+import json
 
 
 class JSON:
