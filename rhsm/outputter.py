@@ -1,7 +1,7 @@
 from enum import Enum
-from rhsm.formats.csv import CSV
-from rhsm.formats.json import JSON
-from rhsm.formats.json_pretty import JSON_Pretty
+from rhsm.formats.f_csv import CSV
+from rhsm.formats.f_json import JSON
+from rhsm.formats.f_json_pretty import JSON_Pretty
 
 OUTPUT_FORMAT_DEFAULT = 'json_pretty'
 

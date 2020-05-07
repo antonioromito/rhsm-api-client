@@ -34,6 +34,7 @@ class Subscription:
         self.pools = pools
         self.poolCount = len(self.pools)
         self.quantity = quantity
+        self.sku = sku
         self.startDate = start_date
         self.status = status
         self.subscriptionName = subscription_name
