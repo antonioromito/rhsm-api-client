@@ -108,6 +108,7 @@ class RHSMClient(object):
             json.dump(config_data, json_config, sort_keys=True, indent=4)
         os.chmod(self.config_file, 0o600)
 
+
 def add_systems_command_options(subparsers):
     systems_parser = subparsers.add_parser('systems', help='Fetch a list of systems.')
 
@@ -174,7 +175,8 @@ def _get_parser():
                        required=False, action='store', default='~/.config/rhsm-cli.conf')
 
     subparsers = parser.add_subparsers(help=('Program mode: systems, allocations, subscriptions, '
-                                       'errata, packages, images, savetoken)'), dest='mode', required='True')
+                                       'errata, packages, images, savetoken)'), dest='mode')
+    subparsers.required = True
 
     add_systems_command_options(subparsers)
     add_allocations_command_options(subparsers)
