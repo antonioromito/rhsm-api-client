@@ -2,6 +2,8 @@
 *__pycache__/
 build/
 *.pyc
+rhsm.egg-info/
+setup.cfg
 
 # Vim temporary files
 *~

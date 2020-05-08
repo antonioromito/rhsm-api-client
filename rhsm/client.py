@@ -15,7 +15,9 @@ to collect data from your account.
 #
 # See the LICENSE file in the source distribution for further information.
 import argparse
+import json
 import logging
+import os
 import six
 from rhsm.service import RHSMAuthorizationCode, RHSMApi
 from rhsm.outputter import Outputter, OutputFormat, OUTPUT_FORMAT_DEFAULT
@@ -34,10 +36,28 @@ class RHSMClient(object):
         self._parser = parser
         self._args = self._parser.parse_args()
         self.mode = self._args.mode
+        self.config_file = os.path.expanduser(self._args.config_file)
+        # self.token is read from the config file with precedence to the
+        # command line argument
+        self.token = None
+        self.read_config()
+        self.service = self.get_service()
+
+    def read_config(self):
+        if os.path.exists(self.config_file):
+            with open(self.config_file, "r") as json_config:
+                config_data = json.load(json_config)
+        else:
+            config_data = {}
+
+        self.token = self._args.token or config_data.get('token')
 
     def get_service(self):
+        if not self.token:
+            # TODO: define a proper Exception (Eg. TokenUndefinedError)
+            raise Exception('API token not defined')
         authorization = RHSMAuthorizationCode(self._args.idp_token_url, self._args.client_id,
-                                              self._args.token)
+                                              self.token)
         authorization.refresh_token()
         api_service = RHSMApi(authorization)
         return api_service
@@ -48,39 +68,45 @@ class RHSMClient(object):
         outputter.write()
 
     def execute_systems(self):
-        service = self.get_service()
         systems = None
         if self._args.uuid is None and self._args.include is None:
-            systems = service.systems()
+            systems = self.service.systems()
         elif self._args.uuid and self._args.include is None:
-            systems = service.systems(uuid=self._args.uuid)
+            systems = self.service.systems(uuid=self._args.uuid)
         elif self._args.uuid and self._args.include:
-            systems = service.systems(uuid=self._args.uuid, include=self._args.include)
+            systems = self.service.systems(uuid=self._args.uuid, include=self._args.include)
         self.output(systems)
 
     def execute_images(self):
-        service = self.get_service()
         checksum = self._args.checksum
-        service.images(checksum=checksum)
+        self.service.images(checksum=checksum)
 
     def execute_allocations(self):
-        service = self.get_service()
-        all_allocations = service.allocations()
+        all_allocations = self.service.allocations()
         self.output(all_allocations)
 
     def execute_subscriptions(self):
-        service = self.get_service()
-        all_subscriptions = service.subscriptions()
+        all_subscriptions = self.service.subscriptions()
         self.output(all_subscriptions)
 
     def execute_errata(self):
-        service = self.get_service()
-        all_errata = service.errata()
+        all_errata = self.service.errata()
         self.output(all_errata)
 
     def execute_packages(self):
         raise NotImplementedError
 
+    def execute_savetoken(self):
+        if os.path.exists(self.config_file):
+            with open(self.config_file, "r") as json_config:
+                config_data = json.load(json_config)
+        else:
+            config_data = {}
+        config_data['token'] = self.token
+
+        with open(self.config_file, "w") as json_config:
+            json.dump(config_data, json_config, sort_keys=True, indent=4)
+        os.chmod(self.config_file, 0o600)
 
 def add_systems_command_options(subparsers):
     systems_parser = subparsers.add_parser('systems', help='Fetch a list of systems.')
@@ -124,9 +150,13 @@ def add_packages_command_options(subparsers):
 
 
 def add_images_command_options(subparsers):
-    image_parser = subparsers.add_parser('images', help='Download an image sfor a given checksum.')
+    image_parser = subparsers.add_parser('images', help='Download an image for a given checksum.')
     image_parser.add_argument('--checksum', help='The checksum of the image to donwload.', required=True,
                               action='store')
+
+
+def add_savetoken_command_options(subparsers):
+    savetoken_parser = subparsers.add_parser('savetoken', help='Save API token in local config file')
 
 
 def _get_parser():
@@ -139,10 +169,12 @@ def _get_parser():
                        default=('https://sso.redhat.com/auth/realms/redhat-external'
                                 '/protocol/openid-connect/token'))
     group.add_argument('-t', '--token', help='Red Hat Customer Portal offline token',
-                       required=True, action='store')
+                       required=False, action='store')
+    group.add_argument('-f', '--config_file', help='Config file to use',
+                       required=False, action='store', default='~/.config/rhsm-cli.conf')
 
     subparsers = parser.add_subparsers(help=('Program mode: systems, allocations, subscriptions, '
-                                       'errata, packages, images)'), dest='mode')
+                                       'errata, packages, images, savetoken)'), dest='mode', required='True')
 
     add_systems_command_options(subparsers)
     add_allocations_command_options(subparsers)
@@ -150,6 +182,7 @@ def _get_parser():
     add_errata_command_options(subparsers)
     add_packages_command_options(subparsers)
     add_images_command_options(subparsers)
+    add_savetoken_command_options(subparsers)
 
     return parser
 
@@ -170,3 +203,5 @@ def main():
         rhsm.execute_packages()
     elif rhsm.mode == "images":
         rhsm.execute_images()
+    elif rhsm.mode == "savetoken":
+        rhsm.execute_savetoken()

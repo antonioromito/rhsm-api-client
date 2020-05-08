@@ -115,19 +115,24 @@ Now the command `rhsm-cli` can be executed from your preferred path.
 ## Usage
 
 ```
-usage: rhsm-cli [-h] [-c CLIENT_ID] [-i IDP_TOKEN_URL] -t TOKEN {systems,allocations,subscriptions,errata,packages,images} ...
+usage: rhsm-cli [-h] [-c CLIENT_ID] [-i IDP_TOKEN_URL] [-t TOKEN]
+                [-f CONFIG_FILE]
+                {systems,allocations,subscriptions,errata,packages,images,savetoken}
+                ...
 
 RHSM API implementation
 
 positional arguments:
-  {systems,allocations,subscriptions,errata,packages,images}
-                        Program mode: system, systems, allocations, subscriptions, errata, packages)
+  {systems,allocations,subscriptions,errata,packages,images,savetoken}
+                        Program mode: systems, allocations, subscriptions,
+                        errata, packages, images, savetoken)
     systems             Fetch a list of systems.
     allocations         Generate allocations CSV report.
     subscriptions       Generate subscriptions CSV report.
     errata              Generate errata CSV report.
     packages            Generate packages CSV report.
-    images              Download an images for a given checksum.
+    images              Download an image for a given checksum.
+    savetoken           Save API token in local config file
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -139,15 +144,33 @@ authentication:
                         Red Hat Customer Portal SSO Token URL (default: https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token)
   -t TOKEN, --token TOKEN
                         Red Hat Customer Portal offline token
+  -f CONFIG_FILE, --config_file CONFIG_FILE
+                        Config file to use
 ```
 
 ## Offline Token Storage
 
 Your offline token is a form of credential and should be treated securely. To help prevent
 your token from being exposed in your shell history or via copy/paste, you can store your token
-as an environment variable in your shell profile.
+in a local config file. The default path for the config file is `~/.config/rhsm-cli.conf`, you
+can also use a different file tanks to the `-f` main option.
 
-For example, with Bash you can add it to your `~/.bashrc` file and add the following line
+The config file is in `JSON` format, here is an example:
+
+```
+{
+    "token": "[...]"
+}
+```
+Is strongly suggested to set the `600` permissions to the config file (`chmod 600 ~/.config/rhsm-cli.conf`)
+You can also save the token defined via the `-t` option wih the `savetoken` action:
+
+```
+$ rhsm-cli -t $TOKEN savetoken
+```
+
+If you prefer passing the token from the command line we suggest to define an evironment variable
+for that. For example, with Bash you can add it to your `~/.bashrc` file and add the following line
 with your token obtained from the Customer Portal:
 
 ```bash
