@@ -13,5 +13,6 @@ setup(
     license='GPLv2+',
     scripts=['rhsm-cli'],
     packages=['rhsm', 'rhsm.objects', 'rhsm.formats'],
-    python_requires = '>=2.6, !=3.0.*, !=3.1.*, !=3.2.*, <4'
+    install_requires=['oauth2client'],
+    python_requires='>=2.6, !=3.0.*, !=3.1.*, !=3.2.*, <4'
 )
