@@ -13,5 +13,6 @@ setup(
     license='GPLv2+',
     scripts=['rhsm-cli'],
     packages=['rhsm', 'rhsm.objects', 'rhsm.formats'],
-    install_requires=['oauthlib', 'requests']
+    install_requires=['oauthlib', 'requests'],
+    deps=['oauthlib', 'requests', 'six']
 )
