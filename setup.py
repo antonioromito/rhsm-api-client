@@ -3,7 +3,7 @@ from setuptools import setup
 from rhsm import __version__ as VERSION
 
 setup(
-    name='rhsm',
+    name='rhsm-cli',
     version=VERSION,
     description='Red Hat Subscription Manager (RHSM) APIs client interface to collect data '
                 'from your RHSM account. ',
@@ -13,5 +13,6 @@ setup(
     license='GPLv2+',
     scripts=['rhsm-cli'],
     packages=['rhsm', 'rhsm.objects', 'rhsm.formats'],
-    install_requires=['oauthlib', 'requests']
+    install_requires=['oauthlib', 'requests'],
+    python_requires = '>=2.6, !=3.0.*, !=3.1.*, !=3.2.*, <4'
 )
