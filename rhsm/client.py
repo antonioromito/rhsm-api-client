@@ -41,7 +41,9 @@ class RHSMClient(object):
         # command line argument
         self.token = None
         self.read_config()
-        self.service = self.get_service()
+
+        if not self.mode == "savetoken":
+            self.service = self.get_service()
 
     def read_config(self):
         if os.path.exists(self.config_file):
@@ -56,8 +58,8 @@ class RHSMClient(object):
         if not self.token:
             # TODO: define a proper Exception (Eg. TokenUndefinedError)
             raise Exception('API token not defined')
-        authorization = RHSMAuthorizationCode(self._args.idp_token_url, self._args.client_id,
-                                              self.token)
+
+        authorization = RHSMAuthorizationCode(self._args.idp_token_url, self._args.client_id, self.token)
         authorization.refresh_token()
         api_service = RHSMApi(authorization)
         return api_service
@@ -152,7 +154,7 @@ def add_packages_command_options(subparsers):
 
 def add_images_command_options(subparsers):
     image_parser = subparsers.add_parser('images', help='Download an image for a given checksum.')
-    image_parser.add_argument('--checksum', help='The checksum of the image to donwload.', required=True,
+    image_parser.add_argument('--checksum', help='The checksum of the image to download.', required=True,
                               action='store')
 
 
