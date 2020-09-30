@@ -3,7 +3,7 @@ from setuptools import setup
 from rhsm import __version__ as VERSION
 
 setup(
-    name='rhsm-cli',
+    name='rhsm',
     version=VERSION,
     description='Red Hat Subscription Manager (RHSM) APIs client interface to collect data '
                 'from your RHSM account. ',
