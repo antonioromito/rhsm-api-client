@@ -19,3 +19,6 @@ setup.cfg
 # virtualenv
 .venv/
 .vscode/
+
+# IntelliJ’s project specific settings files
+.idea/
