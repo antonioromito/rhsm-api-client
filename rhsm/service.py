@@ -42,10 +42,11 @@ class RHSMAuthorizationCode(object):
 
 class RHSMApi(object):
     API_URL = 'https://api.access.redhat.com/management/v1'
-    FETCH_LIMIT = 100
+    fetch_limit = {"systems": 100, "allocations": 50, "errata": 1000, "subscriptions": 50}
 
-    def __init__(self, auth=None):
+    def __init__(self, auth=None, mode=None):
         self.auth = auth
+        self.mode = mode
 
     def _get(self, endpoint, params=None, stream=False):
         retries = 0
@@ -104,19 +105,19 @@ class RHSMApi(object):
                 sys.exit(time.ctime() + ' - Exiting after %d failed attempts to retrive data from: '
                                         '%s' % (retries, response.url))
 
-    def json_batch_fetch(self, fetch_func, deserialize_func):
+    def json_batch_fetch(self, fetch_func, deserialize_func, fetch_limit):
         batch_set = []
         offset = 0
         while True:
             batch = fetch_func(offset)
             batch_count = batch['pagination']['count']
             logging.debug('Fetched %s more entries', batch_count)
-            offset += self.FETCH_LIMIT
+            offset += fetch_limit
             for raw in batch['body']:
                 logging.debug('Processing %s: %s', type(raw), raw)
                 obj = deserialize_func(raw)
                 batch_set.append(obj)
-            if batch_count < self.FETCH_LIMIT:
+            if batch_count < fetch_limit:
                 break
         return batch_set
 
@@ -130,7 +131,7 @@ class RHSMApi(object):
         if uuid is None:
             fetch_func = self.fetch_systems
             deserialize_func = System.deserialize
-            batch = self.json_batch_fetch(fetch_func, deserialize_func)
+            batch = self.json_batch_fetch(fetch_func, deserialize_func, self.fetch_limit["systems"])
             logging.debug('data is %s', fetch_func)
             return batch
         elif uuid and include is None:
@@ -147,9 +148,34 @@ class RHSMApi(object):
             logging.debug('data is %s', fetch_func)
             return single
 
+    def allocations(self):
+        fetch_func = self.fetch_allocations
+        deserialize_func = Allocation.deserialize
+        batch = self.json_batch_fetch(fetch_func, deserialize_func, self.fetch_limit["allocations"])
+        return batch
+
+    def errata(self):
+        fetch_func = self.fetch_errata
+        deserialize_func = Errata.deserialize
+        batch = self.json_batch_fetch(fetch_func, deserialize_func, self.fetch_limit["errata"])
+        return batch
+
+    def subscriptions(self):
+        fetch_func = self.fetch_subscriptions
+        deserialize_func = Subscription.deserialize
+        batch = self.json_batch_fetch(fetch_func, deserialize_func, self.fetch_limit["subscriptions"])
+        return batch
+
+    def images(self, checksum=None):
+        if checksum:
+            fetch_func = self.fetch_images(checksum=checksum)
+            deserialize_func = Image.deserialize
+            image = self.json_single_fetch(fetch_func['response_json'], deserialize_func)
+            image.write_to_file(fetch_func['response_data'], image.get_filename(checksum))
+
     def fetch_systems(self, offset, uuid=None, include=None):
         if uuid is None:
-            payload = {'limit': self.FETCH_LIMIT, 'offset': offset}
+            payload = {'limit': self.fetch_limit["systems"], 'offset': offset}
             data = self._get("systems", params=payload)
         elif uuid and include is None:
             data = self._get("systems/" + uuid)
@@ -158,45 +184,20 @@ class RHSMApi(object):
             data = self._get("systems/" + uuid, params=payload)
         return data
 
-    def allocations(self):
-        fetch_func = self.fetch_allocations
-        deserialize_func = Allocation.deserialize
-        batch = self.json_batch_fetch(fetch_func, deserialize_func)
-        return batch
-
     def fetch_allocations(self, offset):
-        payload = {'limit': self.FETCH_LIMIT, 'offset': offset}
+        payload = {'limit': self.fetch_limit["allocations"], 'offset': offset}
         data = self._get("allocations", params=payload)
         return data
 
-    def errata(self):
-        fetch_func = self.fetch_errata
-        deserialize_func = Errata.deserialize
-        batch = self.json_batch_fetch(fetch_func, deserialize_func)
-        return batch
-
     def fetch_errata(self, offset):
-        payload = {'limit': self.FETCH_LIMIT, 'offset': offset}
+        payload = {'limit': self.fetch_limit["errata"], 'offset': offset}
         data = self._get("errata", params=payload)
         return data
 
-    def subscriptions(self):
-        fetch_func = self.fetch_subscription
-        deserialize_func = Subscription.deserialize
-        batch = self.json_batch_fetch(fetch_func, deserialize_func)
-        return batch
-
-    def fetch_subscription(self, offset):
-        payload = {'limit': self.FETCH_LIMIT, 'offset': offset}
+    def fetch_subscriptions(self, offset):
+        payload = {'limit': self.fetch_limit["subscriptions"], 'offset': offset}
         data = self._get("subscriptions", params=payload)
         return data
-
-    def images(self, checksum=None):
-        if checksum:
-            fetch_func = self.fetch_images(checksum=checksum)
-            deserialize_func = Image.deserialize
-            image = self.json_single_fetch(fetch_func['response_json'], deserialize_func)
-            image.write_to_file(fetch_func['response_data'], image.get_filename(checksum))
 
     def fetch_images(self, checksum):
         response = self._get("images/" + checksum + "/download", stream=True)

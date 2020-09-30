@@ -88,8 +88,8 @@ class RHSMClient(object):
         self.output(all_allocations)
 
     def execute_subscriptions(self):
-        all_subscriptions = self.service.subscriptions()
-        self.output(all_subscriptions)
+        subscriptions = self.service.subscriptions()
+        self.output(subscriptions)
 
     def execute_errata(self):
         all_errata = self.service.errata()
@@ -121,9 +121,6 @@ def add_systems_command_options(subparsers):
                                 required=False, choices=['facts', 'entitlements', 'installedProducts'],
                                 action='store')
 
-    systems_parser.add_argument('-l', '--limit', help=('The default and max number of result in a '
-                                                       'response are 100.'),
-                                default=100, required=False, action='store')
     systems_parser.add_argument('-f', '--format', help='The format to output data as.',
                                 choices=OutputFormat.as_args(), default=OUTPUT_FORMAT_DEFAULT)
 
@@ -136,8 +133,9 @@ def add_allocations_command_options(subparsers):
 
 def add_subscriptions_command_options(subparsers):
     subscriptions_parser = subparsers.add_parser('subscriptions', help='Generate subscriptions CSV report.')
+
     subscriptions_parser.add_argument('-f', '--format', help='The format to output data as.',
-                                choices=OutputFormat.as_args(), default=OUTPUT_FORMAT_DEFAULT)
+                                      choices=OutputFormat.as_args(), default=OUTPUT_FORMAT_DEFAULT)
 
 
 def add_errata_command_options(subparsers):
